@@ -1,0 +1,126 @@
+import queue
+
+'''
+import gi
+
+gi.require_version("Gst", "1.0")
+from gi.repository import Gst, GLib
+import cairo
+
+import time
+import os
+
+from calculator.extractor import extract_detection_from_tensors
+from fileio.writer import get_fullpath, write_inf_img, write_org_img, write_overlay_json
+from fileio.writer import refresh_inf_symlink, refresh_org_symlink
+from graphic.drawer import draw_bbox, draw_hv_radius
+from pipeline.gresource.gframe import GstFrameWrapper
+from app_worker.app_worker import infer_queue, save_queues, frame_queue
+
+
+def on_emit_frame(appsink, udata):
+    stream_code, save_queue_index = udata
+    gst_sample = appsink.emit("pull-sample")
+    new_frame = GstFrameWrapper(gst_sample, stream_code, save_queue_index)
+    infer_queue.put(new_frame)
+    return True
+
+
+def on_start_feed(appsrc, length, stream_code, save_queue_index, pipeline):
+    # 이미지 저장 큐 지정
+    save_queue = save_queues[save_queue_index]
+    if save_queue is None:
+        return False
+
+    if save_queue.qsize() < 1 or infer_queue.qsize() < 5:
+        time.sleep(1)
+        BUFFER_LENGTH = 1280 * 720 * 3
+        gst_buffer = Gst.Buffer.new_allocate(None, BUFFER_LENGTH, None)
+        for _ in (0, len(save_queues)):
+            appsrc.emit("push-buffer", gst_buffer)
+        return True
+
+    while save_queue.qsize() < 1:  # wait until save queue has frame
+        time.sleep(0.001)
+
+    try:
+        frame = save_queue.get(timeout=0)  # detection log socket stream에 쓰임
+        _obj_tensor = frame.get_obj_result()  # detection log socket stream에 쓰임
+        _hv_zone_tensor = frame.get_hv_radius_result()  # detection log socket stream에 쓰임
+        # _danger_zone_tensor = frame.get_danger_zone_result()  # detection log socket stream에 쓰임
+    except queue.Empty:
+        return True
+
+    path_result = get_fullpath()
+    inf_filename = write_inf_img(stream_code, pipeline, path_result)
+    # write_overlay_json(stream_code, frame, path_result)
+    # TODO: Change logic of write_inf_img func() to write inference coordinates text data to the txt file.
+    #   Create 'Temporary inference file' and 'Being written inference file' as initialization.
+    org_filename = write_org_img(stream_code, pipeline, path_result)
+
+    gst_buffer = frame.get_buffer()
+    appsrc.emit("push-buffer", gst_buffer)
+
+    # TEST CODE: symlinking operation moved from on_message bus message call
+    refresh_inf_symlink(stream_code, inf_filename)
+    refresh_org_symlink(stream_code, org_filename)
+
+    # detection log socket stream #
+    detections_in_frame = extract_detection_from_tensors(_obj_tensor, _hv_zone_tensor)
+    frame_queue.put(
+        {'stream_code': stream_code,
+         'timestamp': path_result,
+         'detections_in_frame': detections_in_frame
+         }
+    )
+
+
+def on_stop_feed():
+    print("stop feed")
+    return True
+
+
+def on_draw(_overlay, context, _timestamp, _duration, stream_code):
+    context.select_font_face('Open Sans', cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
+    context.set_font_size(24)
+    draw_bbox(context, stream_code, _timestamp)
+    draw_hv_radius(context, stream_code)
+    # _danger_zone(obj_tensor, stream_code)
+    return True
+
+
+def on_prepare_overlay(_overlay, _caps):
+    # print("*_overlay = ", _overlay, "context = ",
+    #      context, "*_timestamp = ", _timestamp)
+    return
+
+
+def on_message(bus: Gst.Bus, message: Gst.Message, loop: GLib.MainLoop):
+    if message.type == Gst.MessageType.EOS:
+        print(f"on_message : End Of Stream")
+        return True
+
+    if message.type == Gst.MessageType.ERROR:
+        try:
+            err, debug = message.parse_error()
+            print(f"on_message : Error - {err} - {debug}")
+        except UnicodeDecodeError:
+            pass
+        return True
+
+    if message.type == Gst.MessageType.WARNING:
+        err, debug = message.parse_warning()
+        print(f"on_message : Warning - {err} - {debug}")
+        return True
+
+    if message.type == Gst.MessageType.INFO:
+        err, debug = message.parse_info()
+        print(f"on_message : Info - {err} - {debug}")
+        return True
+
+    return True
+'''
+
+
+def on_message():
+    pass
