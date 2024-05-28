@@ -14,11 +14,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt install -y --allow-unauthenticated \
     libssl-dev libffi-dev libgl1-mesa-glx
 RUN dpkg-reconfigure -f noninteractive tzdata
 
-RUN sed -i 's/archive.ubuntu.com/mirror.kakao.com/g' /etc/apt/sources.list
-RUN apt update && apt upgrade -y
-RUN apt autoremove -y
-RUN rm -rf /var/lib/apt/lists/*
-RUN rm -rf /var/cache/apt/archives/*
 
 RUN apt-get update -y
 RUN apt-get install -y python3-dev python3-pip
