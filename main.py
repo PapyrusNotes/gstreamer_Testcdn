@@ -11,8 +11,6 @@ from gi.repository import Gst, GLib, GObject
 
 from pipeline.gresource.gpipeline import GPipeline
 
-# Paths
-# input_video = 'input.mp4'
 hls_dir = 'hls'
 output_playlist = os.path.join('hls/0/output.m3u8')
 print(output_playlist)
@@ -36,7 +34,7 @@ index_html_content ='''<!DOCTYPE html>
     <script>
         var player = videojs('my_video');
         player.src({
-            src: 'output.m3u8',
+            src: '0/output.m3u8',
             type: 'application/x-mpegURL'
         });
     </script>
