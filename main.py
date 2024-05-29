@@ -36,39 +36,6 @@ index_html_content ='''<!DOCTYPE html>
             type: 'application/x-mpegURL'
         });
     </script>
-    
-    <video-js id="my_video" class="vjs-default-skin" controls preload="auto" width="640" height="360"></video-js>
-    <script src="https://vjs.zencdn.net/7.10.2/video.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.js"></script>
-    <script>
-        var player = videojs('my_video');
-        player.src({
-            src: 'output_1.m3u8',
-            type: 'application/x-mpegURL'
-        });
-    </script>
-    
-    <video-js id="my_video" class="vjs-default-skin" controls preload="auto" width="640" height="360"></video-js>
-    <script src="https://vjs.zencdn.net/7.10.2/video.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.js"></script>
-    <script>
-        var player = videojs('my_video');
-        player.src({
-            src: 'output_2.m3u8',
-            type: 'application/x-mpegURL'
-        });
-    </script>
-    
-    <video-js id="my_video" class="vjs-default-skin" controls preload="auto" width="640" height="360"></video-js>
-    <script src="https://vjs.zencdn.net/7.10.2/video.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.14.1/videojs-contrib-hls.js"></script>
-    <script>
-        var player = videojs('my_video');
-        player.src({
-            src: 'output_3.m3u8',
-            type: 'application/x-mpegURL'
-        });
-    </script>
 </body>
 </html>'''
 
