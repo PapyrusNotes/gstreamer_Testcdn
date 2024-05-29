@@ -1,4 +1,4 @@
-docker run -it -d -p 5001:5001 \
+docker run -it -d -p 6003:6003 \
   -v ./:/home/infer1 \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   -v /hls:/home/infer1/hls\

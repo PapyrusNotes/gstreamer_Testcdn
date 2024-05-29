@@ -33,7 +33,7 @@ RUN chsh -s /bin/bash
 USER ${NAME}
 WORKDIR /home/${NAME}
 
-EXPOSE 5001
+EXPOSE 6003
 
 ENTRYPOINT ["/bin/bash" ]
 CMD ["-c", "pip install -r requirements.txt && \
