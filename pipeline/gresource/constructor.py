@@ -1,6 +1,7 @@
 import gi
 
 gi.require_version("Gst", "1.0")
+gi.require_version("GstRtsp", "1.0")
 from gi.repository import Gst, GstRtsp
 
 import sys
@@ -67,6 +68,6 @@ class HLSConstructor:
             print("ERROR: Elements could not be linked")
             sys.exit(1)
         else:
-            print("DONE: Elements could be linked")
+            print("DONE: All elements linked")
 
         return new_bin
