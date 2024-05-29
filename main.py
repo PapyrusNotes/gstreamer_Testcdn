@@ -4,7 +4,7 @@ import subprocess
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from flask import Flask, send_from_directory
 
-app = Flask(__name__)
+app = Flask(__name__,static_folder='static')
 
 UPLOAD_FOLDER_0 = '/hls/0/'
 UPLOAD_FOLDER_1 = '/hls/1/'
