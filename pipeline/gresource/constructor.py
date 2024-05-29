@@ -35,7 +35,7 @@ class HLSConstructor:
 
         hlssink.set_property("max-files", 0)
         hlssink.set_property("playlist-length", 0)
-        hlssink.set_property("location", f"/hls/{self.index}/chunk%05.ts")
+        hlssink.set_property("location", f"/hls/{self.index}/output.ts")
         hlssink.set_property("playlist-location", f"/hls/{self.index}/output.m3u8")
         hlssink.set_property("target-duration", 5)
 
