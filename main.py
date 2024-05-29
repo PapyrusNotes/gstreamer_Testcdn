@@ -36,7 +36,46 @@ index_html_content ='''<!DOCTYPE html>
 <video id="video"></video>
 <script>
   var video = document.getElementById('video');
-  var videoSrc = 'http://localhost:5001/output.m3u8';
+  var videoSrc = 'http://210.206.5.147:5001/hls/0/output.m3u8';
+  if (Hls.isSupported()) {
+    var hls = new Hls();
+    hls.loadSource(videoSrc);
+    hls.attachMedia(video);
+  }
+  else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = videoSrc;
+  }
+</script>
+<video id="video"></video>
+<script>
+  var video = document.getElementById('video');
+  var videoSrc = 'http://210.206.5.147:5001/hls/1/output.m3u8';
+  if (Hls.isSupported()) {
+    var hls = new Hls();
+    hls.loadSource(videoSrc);
+    hls.attachMedia(video);
+  }
+  else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = videoSrc;
+  }
+</script>
+<video id="video"></video>
+<script>
+  var video = document.getElementById('video');
+  var videoSrc = 'http://210.206.5.147:5001/hls/2/output.m3u8';
+  if (Hls.isSupported()) {
+    var hls = new Hls();
+    hls.loadSource(videoSrc);
+    hls.attachMedia(video);
+  }
+  else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = videoSrc;
+  }
+</script>
+<video id="video"></video>
+<script>
+  var video = document.getElementById('video');
+  var videoSrc = 'http://210.206.5.147:5001/hls/3/output.m3u8';
   if (Hls.isSupported()) {
     var hls = new Hls();
     hls.loadSource(videoSrc);
