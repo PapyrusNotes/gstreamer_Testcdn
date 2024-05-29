@@ -36,7 +36,7 @@ index_html_content ='''<!DOCTYPE html>
 <video id="video"></video>
 <script>
   var video = document.getElementById('video');
-  var videoSrc = 'http://localhost:8000/output.m3u8';
+  var videoSrc = 'http://localhost:5001/output.m3u8';
   if (Hls.isSupported()) {
     var hls = new Hls();
     hls.loadSource(videoSrc);
@@ -55,9 +55,9 @@ with open(os.path.join(hls_dir, 'index.html'), 'w') as f:
 
 # Serve the HLS content
 os.chdir(hls_dir)
-server_address = ('', 8000)
+server_address = ('', 5001)
 httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
-print("Serving HLS on port 8000...")
+print("Serving HLS on port 5001...")
 
 
 Gst.init(sys.argv)
