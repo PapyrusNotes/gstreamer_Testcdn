@@ -28,14 +28,14 @@ class HLSConstructor:
 
         parse = Gst.ElementFactory.make("h264parse", "parse")
 
-        mpegtsmux =  Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
+        mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
 
         hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
 
         hlssink.set_property("max-files", 0)
         hlssink.set_property("playlist-length", 0)
-        hlssink.set_property("location", f"/hls/{self.rtsp_src}/chunk%05.ts")
-        hlssink.set_property("playlist-location", f"/hls/{self.rtsp_src}/output.m3u8")
+        hlssink.set_property("location", f"/hls/{self.index}/chunk%05.ts")
+        hlssink.set_property("playlist-location", f"/hls/{self.index}/output.m3u8")
         hlssink.set_property("target-duration", 5)
 
         Gst.Bin.add(new_bin, src)
