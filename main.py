@@ -17,22 +17,22 @@ app.config['UPLOAD_FOLDER_3'] = UPLOAD_FOLDER_3
 
 
 @app.route('/stream/0/<filename>')
-def serve_file(filename):
+def serve_file_1(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER_0'], filename)
 
 
 @app.route('/stream/1/<filename>')
-def serve_file(filename):
+def serve_file_2(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER_1'], filename)
 
 
 @app.route('/stream/2/<filename>')
-def serve_file(filename):
+def serve_file_3(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER_2'], filename)
 
 
 @app.route('/stream/3/<filename>')
-def serve_file(filename):
+def serve_file_4(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER_3'], filename)
 
 
