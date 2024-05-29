@@ -52,9 +52,8 @@ class CORSRequestHandler (SimpleHTTPRequestHandler):
 
 
 os.chdir(hls_dir)
-#server_address = ('', 5001)
-#httpd = HTTPServer(server_address, CORSRequestHandler)
-print("Serving HLS on port 5001...")
+server_address = ('', 6003)
+httpd = HTTPServer(server_address, CORSRequestHandler)
 
 
 Gst.init(sys.argv)
@@ -68,5 +67,5 @@ gpipeline.start(main_loop)
 pipeline = gpipeline.pipeline
 pipeline.set_state(Gst.State.PLAYING)
 
-# httpd.serve_forever()
+httpd.serve_forever()
 
