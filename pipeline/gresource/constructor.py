@@ -7,13 +7,14 @@ import sys
 
 
 class HLSConstructor:
-    def __init__(self, rtsp_src):
+    def __init__(self, rtsp_src, index):
         self.rtsp_src = rtsp_src
         self.local_time = 0
+        self.index = index
 
     def compose_bin(self):
 
-        new_bin = Gst.Bin.new("HLSConstructor")
+        new_bin = Gst.Bin.new(f"HLSBin_{self.index}")
         src = Gst.ElementFactory.make("rtspsrc", "src")
         src.set_property("latency", 2000)
         src.set_property("drop-on-latency", True)

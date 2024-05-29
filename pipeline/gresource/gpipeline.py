@@ -16,7 +16,7 @@ class GPipeline:
 
     def add_bin(self):
         for i, camera in enumerate(self.channels_registry):
-            hls_bin_constructor = HLSConstructor(camera)
+            hls_bin_constructor = HLSConstructor(camera, i)
             hls_bin = hls_bin_constructor.compose_bin()
             self.pipeline.add(hls_bin)
 

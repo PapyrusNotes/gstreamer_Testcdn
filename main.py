@@ -62,7 +62,7 @@ print("Serving HLS on port 8000...")
 
 Gst.init(sys.argv)
 Gst.debug_set_active(True)
-# Gst.debug_set_default_threshold(3)
+Gst.debug_set_default_threshold(3)
 main_loop = GLib.MainLoop()
 gpipeline = GPipeline()
 gpipeline.add_bin()
