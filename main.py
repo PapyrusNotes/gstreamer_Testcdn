@@ -1,8 +1,6 @@
 import os
 import sys
-import subprocess
 from http.server import HTTPServer, SimpleHTTPRequestHandler
-
 
 import gi
 
@@ -46,9 +44,16 @@ with open(os.path.join(hls_dir, 'index.html'), 'w') as f:
 
 # Serve the HLS content
 
+
+class CORSRequestHandler (SimpleHTTPRequestHandler):
+    def end_headers (self):
+        self.send_header('Access-Control-Allow-Origin', '*')
+        SimpleHTTPRequestHandler.end_headers(self)
+
+
 os.chdir(hls_dir)
 server_address = ('', 5001)
-httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
+httpd = HTTPServer(server_address, CORSRequestHandler)
 print("Serving HLS on port 5001...")
 
 
@@ -64,3 +69,4 @@ pipeline = gpipeline.pipeline
 pipeline.set_state(Gst.State.PLAYING)
 
 httpd.serve_forever()
+
