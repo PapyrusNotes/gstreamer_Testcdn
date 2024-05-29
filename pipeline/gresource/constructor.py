@@ -33,8 +33,8 @@ class HLSConstructor:
 
         hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
 
-        hlssink.set_property("max-files", 0)
-        hlssink.set_property("playlist-length", 0)
+        hlssink.set_property("max-files", 10)
+        hlssink.set_property("playlist-length", 10)
         hlssink.set_property("location", f"/hls/{self.index}/output%%05d.ts")
         hlssink.set_property("playlist-location", f"/hls/{self.index}/output.m3u8")
         hlssink.set_property("target-duration", 5)
