@@ -1,18 +1,6 @@
-FROM python:3.10-slim
-# TODO : Chagne to python 3.8.10
-'''
-Traceback (most recent call last):
-  File "/home/infer1/main.py", line 6, in <module>
-    import gi
-  File "/home/infer1/.local/lib/python3.10/site-packages/gi/__init__.py", line 42, in <module>
-    from . import _gi
-ImportError: /home/infer1/.local/lib/python3.10/site-packages/gi/_gi.cpython-310-x86_64-linux-gnu.so: undefined symbol: _PyUnicode_AsStringAndSize
-infer1@2c657b014aa3:~$ python --version
-Python 3.10.14
-'''
+FROM python:3.8.10-slim
+
 ENV NAME=infer1
-
-
 ENV TZ=Asia/Seoul
 RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && echo ${TZ} >/etc/timezone
 
