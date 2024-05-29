@@ -2,15 +2,46 @@ import os
 import sys
 import subprocess
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+from flask import Flask, send_from_directory
+
+app = Flask(__name__)
+
+UPLOAD_FOLDER_0 = '/hls/0/'
+UPLOAD_FOLDER_1 = '/hls/1/'
+UPLOAD_FOLDER_2 = '/hls/2/'
+UPLOAD_FOLDER_3 = '/hls/3/'
+app.config['UPLOAD_FOLDER_0'] = UPLOAD_FOLDER_0
+app.config['UPLOAD_FOLDER_1'] = UPLOAD_FOLDER_1
+app.config['UPLOAD_FOLDER_2'] = UPLOAD_FOLDER_2
+app.config['UPLOAD_FOLDER_3'] = UPLOAD_FOLDER_3
+
+
+@app.route('/stream/0/<filename>')
+def serve_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER_0'], filename)
+
+
+@app.route('/stream/1/<filename>')
+def serve_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER_1'], filename)
+
+
+@app.route('/stream/2/<filename>')
+def serve_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER_2'], filename)
+
+
+@app.route('/stream/3/<filename>')
+def serve_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER_3'], filename)
+
 
 import gi
+
 gi.require_version("Gst", "1.0")
 from gi.repository import Gst, GLib, GObject
 
-
 from pipeline.gresource.gpipeline import GPipeline
-
-
 
 # Paths
 # input_video = 'input.mp4'
@@ -22,7 +53,7 @@ print(output_playlist)
 os.makedirs(hls_dir, exist_ok=True)
 
 # Create index.html
-index_html_content ='''<!DOCTYPE html>
+index_html_content = '''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -91,13 +122,13 @@ index_html_content ='''<!DOCTYPE html>
 with open(os.path.join(hls_dir, 'index.html'), 'w') as f:
     f.write(index_html_content)
 
-
 # Serve the HLS content
+'''
 os.chdir(hls_dir)
 server_address = ('', 5001)
 httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
 print("Serving HLS on port 5001...")
-
+'''
 
 Gst.init(sys.argv)
 Gst.debug_set_active(True)
@@ -110,4 +141,7 @@ gpipeline.start(main_loop)
 pipeline = gpipeline.pipeline
 pipeline.set_state(Gst.State.PLAYING)
 
-httpd.serve_forever()
+# httpd.serve_forever()
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5001)
