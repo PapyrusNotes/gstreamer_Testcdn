@@ -35,8 +35,8 @@ class HLSConstructor:
 
         hlssink.set_property("max-files", 10)
         hlssink.set_property("playlist-length", 10)
-        hlssink.set_property("location", f"/home/infer1/hls/{self.index}/output%%05d.ts")
-        hlssink.set_property("playlist-location", f"/home/infer1/hls/{self.index}/output.m3u8")
+        hlssink.set_property("location", f"/home/infer1/hls/output_{self.index}%%05d.ts")
+        hlssink.set_property("playlist-location", f"/home/infer1/hls/output_{self.index}.m3u8")
         hlssink.set_property("target-duration", 5)
 
         Gst.Bin.add(new_bin, src)

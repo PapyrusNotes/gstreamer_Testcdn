@@ -34,7 +34,7 @@ index_html_content ='''<!DOCTYPE html>
     <script>
         var player = videojs('my_video');
         player.src({
-            src: '0/output.m3u8',
+            src: 'output_0.m3u8',
             type: 'application/x-mpegURL'
         });
     </script>
