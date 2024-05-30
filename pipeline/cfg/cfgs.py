@@ -1,8 +1,14 @@
 RTSP_SRC = ["rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/00/media.smp",
             "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/01/media.smp",
             "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/02/media.smp",
+            "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/06/media.smp",
+            "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/06/media.smp"
+            "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/06/media.smp"
+            "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/06/media.smp"
+            "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/06/media.smp"
+            "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/06/media.smp"
             "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/06/media.smp"]
 
-SRC_CFG = {'framerate': '30/1', 'max-rate': 5}
+# SRC_CFG = {'framerate': '30/1', 'max-rate': 5}
 
-SINK_CFG = {'framerate': '30/1', 'max-rate': 5}
+# SINK_CFG = {'framerate': '30/1', 'max-rate': 5}
