@@ -14,7 +14,7 @@ class HLSConstructor:
         self.index = index
 
     def compose_bin(self):
-
+        print(f"HLS BIN {self.index} !")
         new_bin = Gst.Bin.new(f"HLSBin_{self.index}")
         src = Gst.ElementFactory.make("rtspsrc", "src")
         src.set_property("latency", 2000)
