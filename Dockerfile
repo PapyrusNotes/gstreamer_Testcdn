@@ -29,7 +29,6 @@ RUN apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libg
     gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x
 RUN apt-get install -y gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
     libgstreamer-plugins-base1.0-dev gstreamer1.0-libav gir1.2-gst-rtsp-server-1.0 gstreamer1.0-tools python3-gi-cairo \
-RUN apt-get update -y
 
 RUN pip install nvitop debugpy pycairo PyMySQL cryptography zmq pika python-dotenv
 
