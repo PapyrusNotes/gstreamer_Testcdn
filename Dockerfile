@@ -19,6 +19,7 @@ RUN apt update && apt upgrade -y
 RUN apt autoremove -y
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /var/cache/apt/archives/*
+RUN apt-get install libffi6
 
 RUN apt-get update -y
 RUN apt-get install -y python3-dev python3-pip
