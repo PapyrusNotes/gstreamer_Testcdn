@@ -19,7 +19,7 @@ RUN apt update && apt upgrade -y
 RUN apt autoremove -y
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /var/cache/apt/archives/*
-RUN apt nstall libffi-dev
+RUN apt install libffi-dev
 
 RUN apt-get update -y
 RUN apt-get install -y python3-dev python3-pip
