@@ -14,17 +14,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt install -y --allow-unauthenticated \
     libssl-dev libffi-dev libgl1-mesa-glx
 RUN dpkg-reconfigure -f noninteractive tzdata
 
-RUN sed -i 's/archive.ubuntu.com/mirror.kakao.com/g' /etc/apt/sources.list
-RUN apt update && apt upgrade -y
-RUN apt autoremove -y
-RUN rm -rf /var/lib/apt/lists/*
-RUN rm -rf /var/cache/apt/archives/*
-RUN apt install libffi-dev
 
 RUN apt-get update -y
 RUN apt-get install -y python3-dev python3-pip
 RUN apt-get update -y
-
 RUN apt-get install -y cmake iputils-ping libcairo2-dev libgtk-3-dev libxt-dev libgirepository1.0-dev
 RUN apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev \
     gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x
@@ -38,13 +31,9 @@ RUN useradd -rm -d /home/${NAME} -s /bin/bash -g root -G \
     sudo -u 1000 ${NAME}
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
 RUN chsh -s /bin/bash
-
 USER ${NAME}
 WORKDIR /home/${NAME}
-
 EXPOSE 6003
-
 ENTRYPOINT ["/bin/bash" ]
 CMD ["-c", "pip install -r requirements.txt && \
             /bin/bash "]
-
