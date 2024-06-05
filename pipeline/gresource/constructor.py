@@ -33,8 +33,8 @@ class HLSConstructor:
         tee = Gst.ElementFactory.make("tee", "tee")
 
         # Original video sinking branch
+        video_queue = Gst.ElementFactory.make("queue", "video_queue")
         mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
-
         hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
 
         hlssink.set_property("max-files", 10)
@@ -43,7 +43,8 @@ class HLSConstructor:
         hlssink.set_property("playlist-location", f"/home/infer1/hls/output_{self.index}.m3u8")
         hlssink.set_property("target-duration", 5)
 
-        # Extracting tensors
+        # Extracting tensors branch
+        tensor_queue = Gst.ElementFactory.make("queue", "tensor_queue")
         avdec = Gst.ElementFactory.make("avdec_h264", "decode")
         appsink = Gst.ElementFactory.make("appsink", f"rtspsink-{self.index}")
         appsink.set_property("emit-signals", True)
@@ -57,9 +58,11 @@ class HLSConstructor:
 
         Gst.Bin.add(new_bin, tee)
 
+        Gst.Bin.add(new_bin, video_queue)
         Gst.Bin.add(new_bin, mpegtsmux)
         Gst.Bin.add(new_bin, hlssink)
 
+        Gst.Bin.add(new_bin, tensor_queue)
         Gst.Bin.add(new_bin, avdec)
         Gst.Bin.add(new_bin, appsink)
 
@@ -80,7 +83,11 @@ class HLSConstructor:
             print("tee linked")
 
         # Link Original video sinking branch
-        ret = ret and tee.link(mpegtsmux)
+        ret = ret and tee.link(video_queue)
+        if ret:
+            print("video_queue linked")
+
+        ret = ret and video_queue.link(mpegtsmux)
         if ret:
             print("mpegtsmux linked")
 
@@ -89,7 +96,11 @@ class HLSConstructor:
             print("hlssink linked")
 
         # Extracting tensors branch
-        ret = ret and tee.link(avdec)
+        ret = ret and tee.link(tensor_queue)
+        if ret:
+            print("tensor_queue linked")
+
+        ret = ret and tensor_queue.link(avdec)
         if ret:
             print("avdec linked")
 
