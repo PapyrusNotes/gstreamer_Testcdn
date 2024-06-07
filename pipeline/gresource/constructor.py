@@ -58,7 +58,7 @@ class HLSConstructor:
         videorate.set_property("drop-only", True)
         videorate.set_property("max-rate", 5)
         videorate.set_property("silent", True)
-        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
+        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1280, height=(int)720")
 
         Gst.Bin.add(new_bin, src)
         Gst.Bin.add(new_bin, depay)

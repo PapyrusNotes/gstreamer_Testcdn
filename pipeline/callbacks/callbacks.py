@@ -26,7 +26,7 @@ def on_emit_frame(appsink, index):
     return True
 
 
-def on_start_feed(appsrc, length, stream_code, save_queue_index, pipeline):
+def on_start_feed(appsrc, length, save_queue_index, pipeline):
     # 이미지 저장 큐 지정
     save_queue = save_queues[save_queue_index]
     if save_queue is None:
