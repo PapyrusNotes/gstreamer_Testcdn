@@ -161,7 +161,8 @@ class SinkBinConstructor:
         appsrc.connect("need-data", on_start_feed, self.index, self.pipeline)
 
         convert = Gst.ElementFactory.make("videoconvert", "convert")
-        overlay = Gst.ElementFactory.make("cairooverlay", f"overlay")
+        convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
+        overlay = Gst.ElementFactory.make("cairooverlay", "overlay")
         avenc_h264 = Gst.ElementFactory.make("avenc_h264_omx", "avenc_h264")
 
         mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
@@ -175,6 +176,7 @@ class SinkBinConstructor:
         Gst.Bin.add(new_bin, appsrc)
         Gst.Bin.add(new_bin, convert)
         Gst.Bin.add(new_bin, overlay)
+        Gst.Bin.add(new_bin, convert2)
         Gst.Bin.add(new_bin, avenc_h264)
         Gst.Bin.add(new_bin, mpegtsmux)
         Gst.Bin.add(new_bin, hlssink)
@@ -191,7 +193,11 @@ class SinkBinConstructor:
         if ret:
             print("overlay linked")
 
-        ret = ret and overlay.link(avenc_h264)
+        ret = overlay.link(convert2)
+        if ret:
+            print("convert2 linked")
+
+        ret = ret and convert2.link(avenc_h264)
         if ret:
             print("avenc linked")
 
