@@ -177,12 +177,9 @@ class SinkBinConstructor:
         Gst.Bin.add(new_bin, mpegtsmux)
         Gst.Bin.add(new_bin, hlssink)
 
-        def on_pad_added(element1, pad, element2):
-            string = pad.query_caps(None).to_string()
-            print("********pad.name********", pad.name)
-            element1.link(element2)
-
-        appsrc.connect("pad-added", on_pad_added, convert)
+        ret = appsrc.link(convert)
+        if ret:
+            print("convert linked")
 
         ret = convert.link(overlay)
         if ret:
