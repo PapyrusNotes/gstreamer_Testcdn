@@ -52,6 +52,12 @@ class HLSConstructor:
         appsink.set_property("drop", True)
         appsink.set_property("sync", True)
 
+        videorate = Gst.ElementFactory.make("videorate", f"videorate-{self.index}")
+        videorate.set_property("drop-only", True)
+        videorate.set_property("max-rate", 5)
+        videorate.set_property("silent", True)
+        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
+
         Gst.Bin.add(new_bin, src)
         Gst.Bin.add(new_bin, depay)
         Gst.Bin.add(new_bin, parse)
@@ -104,7 +110,11 @@ class HLSConstructor:
         if ret:
             print("avdec linked")
 
-        ret = ret and avdec.link(appsink)
+        ret = ret and avdec.link(videorate)
+        if ret:
+            print("videorate linked")
+
+        ret = ret and videorate.link_filtered(appsink, caps)
         if ret:
             print("appsink linked")
 
