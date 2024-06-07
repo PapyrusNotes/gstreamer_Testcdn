@@ -179,10 +179,28 @@ class SinkBinConstructor:
         Gst.Bin.add(new_bin, mpegtsmux)
         Gst.Bin.add(new_bin, hlssink)
 
-        ret = appsrc.link(convert)
-        ret = ret and convert.link(overlay)
+        def on_pad_added(element1, pad, element2):
+            string = pad.query_caps(None).to_string()
+            print("********pad.name********", pad.name)
+            if pad.name == "video_0" or pad.name.find("recv") == 0:
+                element1.link(element2)
+
+        appsrc.connect("pad-added", on_pad_added, convert)
+
+        ret = convert.link(overlay)
+        if ret:
+            print("overlay linked")
+
         ret = ret and overlay.link(avenc_h264)
+        if ret:
+            print("avenc linked")
+
         ret = ret and avenc_h264.link(mpegtsmux)
+        if ret:
+            print("mpegtsmux linked")
+
         ret = ret and mpegtsmux.link(hlssink)
+        if ret:
+            print("hlssink linked")
 
         return new_bin
