@@ -52,7 +52,7 @@ class HLSConstructor:
         videorate.set_property("drop-only", True)
         videorate.set_property("max-rate", 5)
         videorate.set_property("silent", True)
-        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB")
+        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
 
         appsink = Gst.ElementFactory.make("appsink", f"rtspsink-{self.index}")
         appsink.set_property("emit-signals", True)
@@ -155,7 +155,7 @@ class SinkBinConstructor:
         appsrc.set_property("is-live", True)
         appsrc.set_property("do-timestamp", True)
         appsrc.connect("need-data", on_start_feed, self.index)
-        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB")
+        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
         appsrc.set_property("caps", caps)
 
         convert = Gst.ElementFactory.make("videoconvert", "convert")
