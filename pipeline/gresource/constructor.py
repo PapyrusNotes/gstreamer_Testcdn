@@ -158,7 +158,7 @@ class SinkBinConstructor:
         appsrc.set_property("is-live", True)
         appsrc.set_property("do-timestamp", True)
         appsrc.set_property("caps", caps)
-        appsrc.connect("need-data", on_start_feed, self.index, self.index, self.pipeline)
+        appsrc.connect("need-data", on_start_feed, self.index, self.pipeline)
 
         convert = Gst.ElementFactory.make("videoconvert", "convert")
         overlay_queue = Gst.ElementFactory.make("queue", "overlay_queue")
