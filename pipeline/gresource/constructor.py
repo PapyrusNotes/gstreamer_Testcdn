@@ -77,12 +77,9 @@ class HLSConstructor:
         Gst.Bin.add(new_bin, videorate)
         Gst.Bin.add(new_bin, appsink)
 
-        def on_pad_added(element1, pad, element2):
-            string = pad.query_caps(None).to_string()
-            print("********pad.name********", pad.name)
-            element1.link(element2)
-
-        src.connect("pad-added", on_pad_added, depay)
+        ret = src.link(depay)
+        if ret:
+            print("depay linked")
 
         ret = depay.link(parse)
         if ret:
@@ -157,11 +154,11 @@ class SinkBinConstructor:
         appsrc.set_property("is-live", True)
         appsrc.set_property("do-timestamp", True)
         appsrc.set_property("caps", caps)
-        appsrc.connect("need-data", on_start_feed, self.index, self.pipeline)
+        appsrc.connect("need-data", on_start_feed, self.index)
 
         convert = Gst.ElementFactory.make("videoconvert", "convert")
-        convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
         overlay = Gst.ElementFactory.make("cairooverlay", "overlay")
+        convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
         avenc_h264 = Gst.ElementFactory.make("avenc_h264_omx", "avenc_h264")
 
         mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
@@ -180,12 +177,9 @@ class SinkBinConstructor:
         Gst.Bin.add(new_bin, mpegtsmux)
         Gst.Bin.add(new_bin, hlssink)
 
-        def on_pad_added(element1, pad, element2):
-            string = pad.query_caps(None).to_string()
-            print("********pad.name********", pad.name)
-            element1.link(element2)
-
-        appsrc.connect("pad-added", on_pad_added, convert)
+        ret = appsrc.link(convert)
+        if ret:
+            print("convert linked")
 
         ret = convert.link(overlay)
         if ret:
