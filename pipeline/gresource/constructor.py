@@ -148,12 +148,9 @@ class SinkBinConstructor:
         new_bin = Gst.Bin.new(f"HLS_Inference-{self.index}")
 
         appsrc = Gst.ElementFactory.make("appsrc", "appsrc")
-        caps = Gst.Caps.from_string(
-            f"video/x-raw, format=RGB, width=1280, height=720")
         appsrc.set_property("format", Gst.Format.TIME)
         appsrc.set_property("is-live", True)
         appsrc.set_property("do-timestamp", True)
-        appsrc.set_property("caps", caps)
         appsrc.connect("need-data", on_start_feed, self.index)
 
         convert = Gst.ElementFactory.make("videoconvert", "convert")
