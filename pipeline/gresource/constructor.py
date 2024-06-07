@@ -161,6 +161,7 @@ class SinkBinConstructor:
         convert = Gst.ElementFactory.make("videoconvert", "convert")
         overlay_queue = Gst.ElementFactory.make("queue", "overlay_queue")
         overlay = Gst.ElementFactory.make("cairooverlay", f"overlay")
+        avenc_h264 = Gst.ElementFactory.make("avenc_h264_omx", "avenc_h264")
 
         mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
         hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
@@ -174,13 +175,15 @@ class SinkBinConstructor:
         Gst.Bin.add(new_bin, convert)
         Gst.Bin.add(new_bin, overlay_queue)
         Gst.Bin.add(new_bin, overlay)
+        Gst.Bin.add(new_bin, avenc_h264)
         Gst.Bin.add(new_bin, mpegtsmux)
         Gst.Bin.add(new_bin, hlssink)
 
         ret = appsrc.link(convert)
         ret = ret and convert.link(overlay_queue)
         ret = ret and overlay_queue.link(overlay)
-        ret = ret and overlay.link(mpegtsmux)
+        ret = ret and overlay.link(avenc_h264)
+        ret = ret and avenc_h264.link(mpegtsmux)
         ret = ret and mpegtsmux.link(hlssink)
 
         return new_bin

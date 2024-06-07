@@ -45,14 +45,12 @@ def on_start_feed(appsrc, length, stream_code, save_queue_index, pipeline):
 
     try:
         frame = save_queue.get(timeout=0)  # detection log socket stream에 쓰임
+        print("on_start_feed, frame hit")
         _obj_tensor = frame.get_obj_result()  # detection log socket stream에 쓰임
         # _hv_zone_tensor = frame.get_hv_radius_result()  # detection log socket stream에 쓰임
         # _danger_zone_tensor = frame.get_danger_zone_result()  # detection log socket stream에 쓰임
     except queue.Empty:
         return True
-
-    inf_filename = write_inf_img(stream_code, pipeline, path_result)
-    org_filename = write_org_img(stream_code, pipeline, path_result)
 
     gst_buffer = frame.get_buffer()
     appsrc.emit("push-buffer", gst_buffer)
