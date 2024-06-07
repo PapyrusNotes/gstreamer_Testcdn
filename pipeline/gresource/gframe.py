@@ -13,3 +13,6 @@ class GstFrameWrapper:
     def set_obj_result(self, prediction_tensor):
         self.object_result = prediction_tensor
 
+    def get_buffer(self):
+        return self.sample.get_buffer()
+
