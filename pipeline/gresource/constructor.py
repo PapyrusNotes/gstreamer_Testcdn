@@ -72,6 +72,9 @@ class HLSConstructor:
 
         Gst.Bin.add(new_bin, tensor_queue)
         Gst.Bin.add(new_bin, avdec)
+        Gst.Bin.add(new_bin, convert)
+        Gst.Bin.add(new_bin, videoscale)
+        Gst.Bin.add(new_bin, videorate)
         Gst.Bin.add(new_bin, appsink)
 
         def on_pad_added(element1, pad, element2):
