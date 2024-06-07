@@ -148,7 +148,7 @@ class SinkBinConstructor:
         self.src = 'RTSP'
         self.pipeline = pipeline
 
-    def compose_bin(self, index):
+    def compose_bin(self):
         new_bin = Gst.Bin.new(f"HLS_Inference-{self.index}")
 
         appsrc = Gst.ElementFactory.make("appsrc", "appsrc")

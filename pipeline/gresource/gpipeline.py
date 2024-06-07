@@ -2,7 +2,7 @@ import gi
 
 gi.require_version("Gst", "1.0")
 from gi.repository import Gst, GObject, GLib
-from .constructor import HLSConstructor
+from .constructor import HLSConstructor, SinkBinConstructor
 
 from pipeline.cfg.cfgs import RTSP_SRC
 from pipeline.callbacks.callbacks import on_message
@@ -17,6 +17,11 @@ class GPipeline:
     def add_bin(self):
         for i, camera in enumerate(self.channels_registry):
             hls_bin_constructor = HLSConstructor(camera, i)
+            hls_bin = hls_bin_constructor.compose_bin()
+            self.pipeline.add(hls_bin)
+
+        for i, camera in enumerate(self.channels_registry):
+            hls_bin_constructor = SinkBinConstructor(i, self.pipeline)
             hls_bin = hls_bin_constructor.compose_bin()
             self.pipeline.add(hls_bin)
 
