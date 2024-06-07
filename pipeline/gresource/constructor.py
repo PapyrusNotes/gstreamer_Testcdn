@@ -80,8 +80,7 @@ class HLSConstructor:
         def on_pad_added(element1, pad, element2):
             string = pad.query_caps(None).to_string()
             print("********pad.name********", pad.name)
-            if pad.name == "video_0" or pad.name.find("recv") == 0:
-                element1.link(element2)
+            element1.link(element2)
 
         src.connect("pad-added", on_pad_added, depay)
 
@@ -184,8 +183,7 @@ class SinkBinConstructor:
         def on_pad_added(element1, pad, element2):
             string = pad.query_caps(None).to_string()
             print("********pad.name********", pad.name)
-            if pad.name == "video_0" or pad.name.find("recv") == 0:
-                element1.link(element2)
+            element1.link(element2)
 
         appsrc.connect("pad-added", on_pad_added, convert)
 
