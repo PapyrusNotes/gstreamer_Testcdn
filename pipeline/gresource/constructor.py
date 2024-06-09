@@ -163,6 +163,8 @@ class SinkBinConstructor:
         convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
         x264enc = Gst.ElementFactory.make("x264enc", "x264enc")
 
+        parse = Gst.ElementFactory.make("h264parse", "parse")
+
         mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
         hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
         hlssink.set_property("max-files", 10)
@@ -175,6 +177,7 @@ class SinkBinConstructor:
         Gst.Bin.add(new_bin, convert)
         Gst.Bin.add(new_bin, overlay)
         Gst.Bin.add(new_bin, convert2)
+        Gst.Bin.add(new_bin, parse)
         Gst.Bin.add(new_bin, x264enc)
         Gst.Bin.add(new_bin, mpegtsmux)
         Gst.Bin.add(new_bin, hlssink)
@@ -195,7 +198,11 @@ class SinkBinConstructor:
         if ret:
             print("avenc linked")
 
-        ret = ret and x264enc.link(mpegtsmux)
+        ret = ret and x264enc.link(parse)
+        if ret:
+            print("parse linked")
+
+        ret = ret and parse.link(mpegtsmux)
         if ret:
             print("mpegtsmux linked")
 
