@@ -27,7 +27,7 @@ Gst.debug_set_default_threshold(3)
 main_loop = GLib.MainLoop()
 
 # Gstreamer Main Loop Task를 Python Thread에 할당
-thread = Thread(target=main_loop.run)
+thread = Thread(target=main_loop.run, daemon=True)
 thread.start()
 
 
@@ -48,7 +48,7 @@ app_worker = AppWorker(mlmodel=mlmodel)
 
 while True:
     try:
-        print("This is main app loop")
+        print("This is main loop")
         app_worker.process_imaging()
     except KeyboardInterrupt:
         pipeline.set_state(Gst.State.NULL)
