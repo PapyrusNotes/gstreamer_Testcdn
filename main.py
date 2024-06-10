@@ -50,6 +50,7 @@ while True:
     try:
         app_worker.process_imaging()
     except KeyboardInterrupt:
+        pipeline.set_state(Gst.State.NULL)
         main_loop.quit()
         sys.exit(1)
 
