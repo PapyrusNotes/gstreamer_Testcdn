@@ -48,6 +48,7 @@ app_worker = AppWorker(mlmodel=mlmodel)
 
 while True:
     try:
+        print("This is main app loop")
         app_worker.process_imaging()
     except KeyboardInterrupt:
         pipeline.set_state(Gst.State.NULL)

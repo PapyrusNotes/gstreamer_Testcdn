@@ -31,6 +31,7 @@ class AppWorker:
             img_array = get_ndarray(sample)
 
             self.mlmodel.predict(img_array=img_array, input_shape=(960, 960))
+            print("PREDICTED")
 
             obj_tensor_result = self.mlmodel.extract_tensor()
             frame.set_obj_result(obj_tensor_result)
@@ -38,4 +39,5 @@ class AppWorker:
 
             save_queues[save_queue_index].put(frame)
         except queue.Empty:
+            print("Infer queue empty")
             pass
