@@ -94,6 +94,9 @@ def on_message(bus: Gst.Bus, message: Gst.Message, loop: GLib.MainLoop):
         print(f"on_message : Info - {err} - {debug}")
         return True
 
+    msg_struct = message.get_structure()
+    print(f"GBUS : on_message msg_name: {msg_struct.get_name()} ")
+
     return True
 
 
