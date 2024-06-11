@@ -45,7 +45,6 @@ class HLSConstructor:
 
         # Extracting tensors branch
         tensor_queue = Gst.ElementFactory.make("queue", "tensor_queue")
-        parse2 = Gst.ElementFactory.make("h264parse", "parse2")
         avdec = Gst.ElementFactory.make("avdec_h264", "decode")
         convert = Gst.ElementFactory.make("videoconvert", "convert")
         videoscale = Gst.ElementFactory.make("videoscale")
@@ -73,7 +72,6 @@ class HLSConstructor:
         Gst.Bin.add(new_bin, hlssink)
 
         Gst.Bin.add(new_bin, tensor_queue)
-        Gst.Bin.add(new_bin, parse2)
         Gst.Bin.add(new_bin, avdec)
         Gst.Bin.add(new_bin, convert)
         Gst.Bin.add(new_bin, videoscale)
@@ -113,11 +111,7 @@ class HLSConstructor:
         if ret:
             print("tensor_queue linked")
 
-        ret = ret and tensor_queue.link(parse2)
-        if ret:
-            print("parse2 linked")
-
-        ret = ret and parse2.link(avdec)
+        ret = ret and tensor_queue.link(avdec)
         if ret:
             print("avdec linked")
 
