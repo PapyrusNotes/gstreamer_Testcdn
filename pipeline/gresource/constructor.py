@@ -34,6 +34,8 @@ class HLSConstructor:
 
         # Original video sinking branch
         video_queue = Gst.ElementFactory.make("queue", "video_queue")
+        video_queue.set_property("max-size-buffers", 10)
+
         mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
         hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
 
@@ -45,6 +47,8 @@ class HLSConstructor:
 
         # Extracting tensors branch
         tensor_queue = Gst.ElementFactory.make("queue", "tensor_queue")
+        tensor_queue.set_property("max-size-buffers", 10)
+
         avdec = Gst.ElementFactory.make("avdec_h264", "decode")
         convert = Gst.ElementFactory.make("videoconvert", "convert")
         videoscale = Gst.ElementFactory.make("videoscale")
