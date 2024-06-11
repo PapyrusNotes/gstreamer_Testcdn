@@ -1,5 +1,4 @@
-RTSP_SRC = ["rtsp://210.99.70.120:1935/live/cctv001.stream",
-            # "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/00/media.smp",
+RTSP_SRC = [ "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/00/media.smp",
             # "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/01/media.smp",
             # "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/02/media.smp",
             # "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/06/media.smp",
