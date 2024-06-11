@@ -6,7 +6,8 @@ from gi.repository import Gst, GstRtsp
 
 import sys
 
-from pipeline.callbacks.callbacks import on_emit_frame, on_start_feed
+from pipeline.callbacks.callbacks import on_emit_frame, on_start_feed, on_tensor_queue
+from pipeline.callbacks.callbacks import on_prepare_overlay
 
 
 class HLSConstructor:
@@ -47,6 +48,7 @@ class HLSConstructor:
         # Extracting tensors branch
         tensor_queue = Gst.ElementFactory.make("queue", "tensor_queue")
         tensor_queue.set_property("max-size-buffers", 10)
+        tensor_queue.connect("pushing", on_tensor_queue, self.index)
         avdec = Gst.ElementFactory.make("avdec_h264", "decode")
         convert = Gst.ElementFactory.make("videoconvert", "convert")
         videoscale = Gst.ElementFactory.make("videoscale")
@@ -162,6 +164,7 @@ class SinkBinConstructor:
 
         convert = Gst.ElementFactory.make("videoconvert", "convert")
         overlay = Gst.ElementFactory.make("cairooverlay", "overlay")
+        overlay.connect('caps-changed', on_prepare_overlay)
         convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
         x264enc = Gst.ElementFactory.make("x264enc", "x264enc")
 

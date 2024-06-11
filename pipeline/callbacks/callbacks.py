@@ -66,6 +66,11 @@ def on_prepare_overlay(_overlay, _caps):
     return
 
 
+def on_tensor_queue(queue, udata):
+    print(f"tensor_queue {udata} ready")
+    return True
+
+
 def on_message(bus: Gst.Bus, message: Gst.Message, loop: GLib.MainLoop):
     if message.type == Gst.MessageType.EOS:
         print(f"on_message : End Of Stream")
