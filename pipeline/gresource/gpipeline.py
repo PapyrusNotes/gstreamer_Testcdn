@@ -26,9 +26,9 @@ class GPipeline:
             sink_bin = sink_bin_constructor.compose_bin()
             self.pipeline.add(sink_bin)
 
-    def start(self, main_loop):
+    def start(self):
         self.pipeline.set_state(Gst.State.PLAYING)
         bus = self.pipeline.get_bus()
         self.bus = bus
         self.bus.add_signal_watch()
-        self.bus.connect("message", on_message, main_loop)
+        # self.bus.connect("message", on_message, main_loop)

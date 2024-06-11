@@ -23,16 +23,16 @@ def main():
     Gst.init(sys.argv)
     Gst.debug_set_active(True)
     Gst.debug_set_default_threshold(3)
-    main_loop = GLib.MainLoop()
+    # main_loop = GLib.MainLoop()
 
     # Gstreamer Main Loop Task를 Python Thread에 할당
-    thread = Thread(target=main_loop.run)
-    thread.start()
+    # thread = Thread(target=main_loop.run)
+    # thread.start()
 
     initialize_global_tensors(RTSP_SRC)
     gpipeline = GPipeline()
     gpipeline.add_bin()
-    gpipeline.start(main_loop)
+    gpipeline.start()
     pipeline = gpipeline.pipeline
     time.sleep(2)
 
@@ -42,7 +42,7 @@ def main():
             app_worker.process_imaging()
         except KeyboardInterrupt:
             pipeline.set_state(Gst.State.NULL)
-            main_loop.quit()
+            # main_loop.quit()
             sys.exit(1)
 
 
