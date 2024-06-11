@@ -40,7 +40,7 @@ gpipeline.start(main_loop)
 
 pipeline = gpipeline.pipeline
 pipeline.set_state(Gst.State.PLAYING)
-
+Gst.debug_bin_to_dot_file(pipeline, GST_DEBUG_GRAPH_SHOW_ALL, "pipeline")
 # App Task 초기화
 mlmodel_manager = ModelManager()
 mlmodel = mlmodel_manager.load_model()
