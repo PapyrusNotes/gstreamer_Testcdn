@@ -15,7 +15,7 @@ def get_ndarray(sample):
     array = np.ndarray(
         (height, width, 3),
         buffer=buf.extract_dup(0, buf.get_size()),
-        dtype=np.uint16)
+        dtype=np.uint8)
     buf.unmap(map_info)
     array = array[..., ::-1]
     return array
