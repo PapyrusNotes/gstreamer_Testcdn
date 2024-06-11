@@ -29,7 +29,7 @@ def on_start_feed(appsrc, length, save_queue_index):
 
     if save_queue.qsize() < 1 or infer_queue.qsize() < 5:
         time.sleep(1)
-        BUFFER_LENGTH = 212992
+        BUFFER_LENGTH = 1920*1080*3  # 6220800
         gst_buffer = Gst.Buffer.new_allocate(None, BUFFER_LENGTH, None)
         for _ in (0, len(save_queues)):
             appsrc.emit("push-buffer", gst_buffer)
