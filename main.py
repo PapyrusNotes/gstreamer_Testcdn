@@ -32,9 +32,9 @@ def main():
     initialize_global_tensors(RTSP_SRC)
     gpipeline = GPipeline()
     gpipeline.add_bin()
-    gpipeline.start()
+    # gpipeline.start()
     pipeline = gpipeline.pipeline
-    time.sleep(2)
+    pipeline.set_state(Gst.State.PLAYING)
 
     while True:
         try:
