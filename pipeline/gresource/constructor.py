@@ -50,12 +50,13 @@ class HLSConstructor:
         avdec = Gst.ElementFactory.make("avdec_h264", "decode")
         convert = Gst.ElementFactory.make("videoconvert", "convert")
         videoscale = Gst.ElementFactory.make("videoscale")
+        '''
         videorate = Gst.ElementFactory.make("videorate", f"videorate-{self.index}")
         videorate.set_property("drop-only", True)
         videorate.set_property("max-rate", 5)
         videorate.set_property("silent", True)
         caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
-
+        '''
         appsink = Gst.ElementFactory.make("appsink", f"rtspsink-{self.index}")
         appsink.set_property("emit-signals", True)
         appsink.set_property("max-buffers", 10)
@@ -77,7 +78,7 @@ class HLSConstructor:
         Gst.Bin.add(new_bin, avdec)
         Gst.Bin.add(new_bin, convert)
         Gst.Bin.add(new_bin, videoscale)
-        Gst.Bin.add(new_bin, videorate)
+        # Gst.Bin.add(new_bin, videorate)
         Gst.Bin.add(new_bin, appsink)
 
         def on_pad_added(element1, pad, element2):
@@ -124,12 +125,16 @@ class HLSConstructor:
         ret = ret and convert.link(videoscale)
         if ret:
             print("videscale linked")
-
+        '''
         ret = ret and videoscale.link(videorate)
         if ret:
             print("videorate linked")
-
+        
         ret = ret and videorate.link_filtered(appsink, caps)
+        if ret:
+            print("appsink linked")
+        '''
+        ret = ret and videoscale.link(appsink)
         if ret:
             print("appsink linked")
 
