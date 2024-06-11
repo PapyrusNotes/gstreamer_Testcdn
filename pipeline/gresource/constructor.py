@@ -15,7 +15,7 @@ class HLSConstructor:
         self.local_time = 0
         self.index = index
 
-    def compose_bin(self):
+    def compose_bin(self, bus):
         new_bin = Gst.Bin.new(f"HLSBin_{self.index}")
         src = Gst.ElementFactory.make("rtspsrc", "src")
         src.set_property("latency", 2000)
@@ -63,6 +63,8 @@ class HLSConstructor:
         appsink.set_property("max-buffers", 10)
         appsink.set_property("drop", True)
         appsink.set_property("sync", True)
+        bus.connect("new-sample", on_emit_frame, self.index)
+        print("appsink on_emit_Frame connected")
 
         Gst.Bin.add(new_bin, src)
         Gst.Bin.add(new_bin, depay)
@@ -139,9 +141,6 @@ class HLSConstructor:
             sys.exit(1)
         else:
             print("DONE: All elements linked")
-
-        appsink.connect("new-sample", on_emit_frame, self.index)
-        print("appsink on_emit_Frame connected")
 
         return new_bin
 
