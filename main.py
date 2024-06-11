@@ -21,7 +21,7 @@ def main():
     main_loop = GLib.MainLoop()
 
     # Gstreamer Main Loop Task를 Python Thread에 할당
-    thread = Thread(target=main_loop.run, daemon=True)
+    thread = Thread(target=main_loop.run)
     thread.start()
 
     initialize_global_tensors(RTSP_SRC)
