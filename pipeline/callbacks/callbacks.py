@@ -30,10 +30,6 @@ def on_start_feed(appsrc, length, save_queue_index):
         print("Invalid save_queue")
         return False
 
-    while save_queue.qsize() < 1:  # wait until save queue has frame
-        print("save_queue empty")
-        time.sleep(0.001)
-
     try:
         frame = save_queue.get(timeout=0)  # detection log socket stream에 쓰임
         print("on_start_feed, frame hit")
