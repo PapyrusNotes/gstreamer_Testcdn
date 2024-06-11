@@ -118,10 +118,10 @@ class HLSConstructor:
         if ret:
             print("convert linked")
 
-        ret = ret and convert.link(appsink)
+        ret = ret and convert.link(videoscale)
         if ret:
             print("videscale linked")
-        '''
+
         ret = ret and videoscale.link(videorate)
         if ret:
             print("videorate linked")
@@ -135,7 +135,7 @@ class HLSConstructor:
             sys.exit(1)
         else:
             print("DONE: All elements linked")
-        '''
+
         appsink.connect("new-sample", on_emit_frame, self.index)
         print("appsink on_emit_Frame connected")
 
