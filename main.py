@@ -14,12 +14,6 @@ from app_worker.global_tensors import initialize_global_tensors
 
 
 def main():
-    hls_dir = 'hls'
-    output_playlist = os.path.join('hls/0/output.m3u8')
-    print(output_playlist)
-
-    # Create HLS directory if it doesn't exist
-    os.makedirs(hls_dir, exist_ok=True)
 
     # App Task 초기화
     mlmodel_manager = ModelManager()
@@ -28,7 +22,7 @@ def main():
 
     Gst.init(sys.argv)
     Gst.debug_set_active(True)
-    # Gst.debug_set_default_threshold(3)
+    Gst.debug_set_default_threshold(4)
     main_loop = GLib.MainLoop()
 
     # Gstreamer Main Loop Task를 Python Thread에 할당
