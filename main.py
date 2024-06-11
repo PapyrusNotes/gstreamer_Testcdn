@@ -17,7 +17,7 @@ def main():
 
     Gst.init(sys.argv)
     Gst.debug_set_active(True)
-    Gst.debug_set_default_threshold(2)
+    Gst.debug_set_default_threshold(5)
     main_loop = GLib.MainLoop()
 
     # Gstreamer Main Loop Task를 Python Thread에 할당

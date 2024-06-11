@@ -48,6 +48,7 @@ class HLSConstructor:
         # Extracting tensors branch
         tensor_queue = Gst.ElementFactory.make("queue", "tensor_queue")
         tensor_queue.set_property("max-size-buffers", 10)
+        tensor_queue.set_property("leaky", 2)
         tensor_queue.connect("pushing", on_tensor_queue, self.index)
         avdec = Gst.ElementFactory.make("avdec_h264", "decode")
         convert = Gst.ElementFactory.make("videoconvert", "convert")
