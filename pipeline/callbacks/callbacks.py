@@ -23,19 +23,12 @@ def on_emit_frame(appsink, index):
 
 
 def on_start_feed(appsrc, length, save_queue_index):
-    print("on_start_Feed callback")
+    print("<on_start_Feed callback>")
     # 이미지 저장 큐 지정
     save_queue = save_queues[save_queue_index]
     if save_queue is None:
+        print("Invalid save_queue")
         return False
-
-    if save_queue.qsize() < 1 or infer_queue.qsize() < 5:
-        time.sleep(1)
-        BUFFER_LENGTH = 1920 * 1080 * 3  # 6220800
-        gst_buffer = Gst.Buffer.new_allocate(None, BUFFER_LENGTH, None)
-        for _ in (0, len(save_queues)):
-            appsrc.emit("push-buffer", gst_buffer)
-        return True
 
     while save_queue.qsize() < 1:  # wait until save queue has frame
         print("save_queue empty")
@@ -47,13 +40,12 @@ def on_start_feed(appsrc, length, save_queue_index):
         _obj_tensor = frame.get_obj_result()  # detection log socket stream에 쓰임
         # _hv_zone_tensor = frame.get_hv_radius_result()  # detection log socket stream에 쓰임
         # _danger_zone_tensor = frame.get_danger_zone_result()  # detection log socket stream에 쓰임
+        gst_buffer = frame.get_buffer()
+        print("gst_buffer : ", gst_buffer)
+        appsrc.emit("push-buffer", gst_buffer)
     except queue.Empty:
         print("save_queue empty")
         return True
-
-    gst_buffer = frame.get_buffer()
-    print("gst_buffer : ", gst_buffer)
-    appsrc.emit("push-buffer", gst_buffer)
 
 
 def on_stop_feed():
