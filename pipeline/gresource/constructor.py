@@ -113,11 +113,11 @@ class HLSConstructor:
         if ret:
             print("tensor_queue linked")
 
-        ret = ret and tee.link(parse2)
+        ret = ret and tensor_queue.link(parse2)
         if ret:
             print("parse2 linked")
 
-        ret = ret and tensor_queue.link(avdec)
+        ret = ret and parse2.link(avdec)
         if ret:
             print("avdec linked")
 
