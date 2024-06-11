@@ -23,7 +23,9 @@ class AppWorker:
         try:
             if infer_queue.qsize() < 1:
                 time.sleep(0.01)
+                print("infer_queue lack of frame")
             frame = infer_queue.get()
+            print("infer queue frame hit")
             sample = frame.get_sample()
             stream_code = frame.stream_code
             save_queue_index = frame.save_queue_index
@@ -38,4 +40,5 @@ class AppWorker:
 
             save_queues[save_queue_index].put(frame)
         except queue.Empty:
+            print("infer queue is empty")
             pass

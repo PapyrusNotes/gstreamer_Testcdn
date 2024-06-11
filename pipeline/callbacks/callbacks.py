@@ -1,59 +1,54 @@
 import queue
 
-
-from app_worker.app_worker import infer_queue
-
-
 import gi
 
 gi.require_version("Gst", "1.0")
 from gi.repository import Gst, GLib
 import cairo
 
-import time
-import os
-
 from calculator.extractor import extract_detection_from_tensors
 from graphic.drawer import draw_bbox
 from pipeline.gresource.gframe import GstFrameWrapper
-from app_worker.app_worker import infer_queue, save_queues, frame_queue
+from app_worker.app_worker import infer_queue, save_queues
+import time
 
 
 def on_emit_frame(appsink, index):
+    print("on_emit_frame callback triggerd")
     gst_sample = appsink.emit("pull-sample")
     new_frame = GstFrameWrapper(gst_sample, index)
     infer_queue.put(new_frame)
+    print("put frame into infer queue")
     return True
 
 
 def on_start_feed(appsrc, length, save_queue_index):
-    # 이미지 저장 큐 지정
+    # Frame 저장 큐 지정
+    print("call back on_start_feed reacehd")
     save_queue = save_queues[save_queue_index]
     if save_queue is None:
+        print(f"save_queue {save_queue_index} is None")
         return False
 
     if save_queue.qsize() < 1 or infer_queue.qsize() < 5:
-        time.sleep(1)
-        BUFFER_LENGTH = 1920 * 1080 * 3
-        gst_buffer = Gst.Buffer.new_allocate(None, BUFFER_LENGTH, None)
-        for _ in (0, len(save_queues)):
-            appsrc.emit("push-buffer", gst_buffer)
-        return True
-
-    while save_queue.qsize() < 1:  # wait until save queue has frame
-        time.sleep(0.001)
+        print("queue sparse reacehd")
+        buffer_size = 1920 * 1080 * 3
+        gst_buffer = Gst.Buffer.new_allocate(None, buffer_size, None)
+        appsrc.emit("push-buffer", gst_buffer)
 
     try:
-        frame = save_queue.get(timeout=0)  # detection log socket stream에 쓰임
+        frame = save_queue.get(timeout=2)  # detection log socket stream에 쓰임
         print("on_start_feed, frame hit")
         _obj_tensor = frame.get_obj_result()  # detection log socket stream에 쓰임
         # _hv_zone_tensor = frame.get_hv_radius_result()  # detection log socket stream에 쓰임
         # _danger_zone_tensor = frame.get_danger_zone_result()  # detection log socket stream에 쓰임
+        print("pushing gst Buffer reached")
+        gst_buffer = frame.get_buffer()
+        appsrc.emit("push-buffer", gst_buffer)  # App pushes to data to gpipeline
     except queue.Empty:
+        print("save_Queue is empty")
+        time.sleep(1)
         return True
-
-    gst_buffer = frame.get_buffer()
-    appsrc.emit("push-buffer", gst_buffer)
 
 
 def on_stop_feed():

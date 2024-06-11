@@ -56,7 +56,7 @@ class HLSConstructor:
 
         appsink = Gst.ElementFactory.make("appsink", f"rtspsink-{self.index}")
         appsink.set_property("emit-signals", True)
-        appsink.set_property("max-buffers", 4)
+        appsink.set_property("max-buffers", 10)
         appsink.set_property("drop", True)
         appsink.set_property("sync", True)
 
@@ -118,10 +118,10 @@ class HLSConstructor:
         if ret:
             print("convert linked")
 
-        ret = ret and convert.link(videoscale)
+        ret = ret and convert.link(appsink)
         if ret:
             print("videscale linked")
-
+        '''
         ret = ret and videoscale.link(videorate)
         if ret:
             print("videorate linked")
@@ -135,8 +135,9 @@ class HLSConstructor:
             sys.exit(1)
         else:
             print("DONE: All elements linked")
-
+        '''
         appsink.connect("new-sample", on_emit_frame, self.index)
+        print("appsink on_emit_Frame connected")
 
         return new_bin
 
@@ -153,6 +154,7 @@ class SinkBinConstructor:
         appsrc = Gst.ElementFactory.make("appsrc", "appsrc")
         appsrc.set_property("format", Gst.Format.TIME)
         appsrc.set_property("is-live", True)
+        appsrc.set_property("block", False)
         appsrc.set_property("do-timestamp", True)
         appsrc.connect("need-data", on_start_feed, self.index)
         caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
@@ -162,8 +164,6 @@ class SinkBinConstructor:
         overlay = Gst.ElementFactory.make("cairooverlay", "overlay")
         convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
         x264enc = Gst.ElementFactory.make("x264enc", "x264enc")
-
-        parse = Gst.ElementFactory.make("h264parse", "parse")
 
         mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
         hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
@@ -177,7 +177,6 @@ class SinkBinConstructor:
         Gst.Bin.add(new_bin, convert)
         Gst.Bin.add(new_bin, overlay)
         Gst.Bin.add(new_bin, convert2)
-        Gst.Bin.add(new_bin, parse)
         Gst.Bin.add(new_bin, x264enc)
         Gst.Bin.add(new_bin, mpegtsmux)
         Gst.Bin.add(new_bin, hlssink)
@@ -198,11 +197,7 @@ class SinkBinConstructor:
         if ret:
             print("avenc linked")
 
-        ret = ret and x264enc.link(parse)
-        if ret:
-            print("parse linked")
-
-        ret = ret and parse.link(mpegtsmux)
+        ret = ret and x264enc.link(mpegtsmux)
         if ret:
             print("mpegtsmux linked")
 

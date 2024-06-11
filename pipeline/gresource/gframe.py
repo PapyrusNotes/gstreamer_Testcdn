@@ -16,3 +16,6 @@ class GstFrameWrapper:
     def get_buffer(self):
         return self.sample.get_buffer()
 
+    def get_obj_result(self):
+        return self.object_result
+
