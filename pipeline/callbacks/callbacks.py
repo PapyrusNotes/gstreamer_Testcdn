@@ -35,12 +35,12 @@ def on_start_feed(appsrc, length, save_queue_index):
         buffer_size = 1920 * 1080 * 3
         gst_buffer = Gst.Buffer.new_allocate(None, buffer_size, None)
         appsrc.emit("push-buffer", gst_buffer)
-
-    while save_queue.qsize() < 1:
-        time.sleep(0.01)
+        for _ in (0, len(save_queues)):
+            appsrc.emit("push-buffer", gst_buffer)
+        return True
 
     try:
-        frame = save_queue.get(timeout=2)  # detection log socket stream에 쓰임
+        frame = save_queue.get(timeout=0)  # detection log socket stream에 쓰임
         print("on_start_feed, frame hit")
         _obj_tensor = frame.get_obj_result()  # detection log socket stream에 쓰임
         # _hv_zone_tensor = frame.get_hv_radius_result()  # detection log socket stream에 쓰임
