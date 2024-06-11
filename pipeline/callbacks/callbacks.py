@@ -48,6 +48,7 @@ def on_start_feed(appsrc, length, save_queue_index):
         return True
 
     gst_buffer = frame.get_buffer()
+    print("gst_buffer : ", gst_buffer)
     appsrc.emit("push-buffer", gst_buffer)
 
 
