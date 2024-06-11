@@ -15,10 +15,10 @@ class HLSConstructor:
         self.local_time = 0
         self.index = index
 
-    def compose_bin(self, bus):
+    def compose_bin(self):
         new_bin = Gst.Bin.new(f"HLSBin_{self.index}")
         src = Gst.ElementFactory.make("rtspsrc", "src")
-        src.set_property("latency", 2000)
+        src.set_property("latency", 100)
         src.set_property("drop-on-latency", True)
         src.set_property("do-rtsp-keep-alive", True)
         src.set_property("udp-reconnect", True)
@@ -63,7 +63,7 @@ class HLSConstructor:
         appsink.set_property("max-buffers", 10)
         appsink.set_property("drop", True)
         appsink.set_property("sync", True)
-        bus.connect("new-sample", on_emit_frame, self.index)
+        appsink.connect("new-sample", on_emit_frame, self.index)
         print("appsink on_emit_Frame connected")
 
         Gst.Bin.add(new_bin, src)
