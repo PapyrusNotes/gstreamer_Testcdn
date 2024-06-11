@@ -78,9 +78,12 @@ class HLSConstructor:
         Gst.Bin.add(new_bin, videorate)
         Gst.Bin.add(new_bin, appsink)
 
-        ret = src.link(depay)
-        if ret:
-            print("depay linked")
+        def on_pad_added(element1, pad, element2):
+            string = pad.query_caps(None).to_string()
+            print("********pad.name********", pad.name)
+            element1.link(element2)
+
+        src.connect("pad-added", on_pad_added, depay)
 
         ret = depay.link(parse)
         if ret:
