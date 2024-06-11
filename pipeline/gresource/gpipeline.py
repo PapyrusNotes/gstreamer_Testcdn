@@ -21,9 +21,9 @@ class GPipeline:
             self.pipeline.add(hls_bin)
 
         for i, camera in enumerate(self.channels_registry):
-            hls_bin_constructor = SinkBinConstructor(i, self.pipeline)
-            hls_bin = hls_bin_constructor.compose_bin()
-            self.pipeline.add(hls_bin)
+            sink_bin_constructor = SinkBinConstructor(i, self.pipeline)
+            sink_bin = sink_bin_constructor.compose_bin()
+            self.pipeline.add(sink_bin)
 
     def start(self, main_loop):
         self.pipeline.set_state(Gst.State.PLAYING)
