@@ -56,9 +56,10 @@ class HLSConstructor:
 
         appsink = Gst.ElementFactory.make("appsink", f"rtspsink-{self.index}")
         appsink.set_property("emit-signals", True)
-        appsink.set_property("max-buffers", 4)
+        appsink.set_property("max-buffers", 100)
         appsink.set_property("drop", True)
         appsink.set_property("sync", True)
+        appsink.connect("new-sample", on_emit_frame, self.index)
 
         Gst.Bin.add(new_bin, src)
         Gst.Bin.add(new_bin, depay)
@@ -77,12 +78,9 @@ class HLSConstructor:
         Gst.Bin.add(new_bin, videorate)
         Gst.Bin.add(new_bin, appsink)
 
-        def on_pad_added(element1, pad, element2):
-            string = pad.query_caps(None).to_string()
-            print("********pad.name********", pad.name)
-            element1.link(element2)
-
-        src.connect("pad-added", on_pad_added, depay)
+        ret = src.link(depay)
+        if ret:
+            print("depay linked")
 
         ret = depay.link(parse)
         if ret:
@@ -135,8 +133,6 @@ class HLSConstructor:
             sys.exit(1)
         else:
             print("DONE: All elements linked")
-
-        appsink.connect("new-sample", on_emit_frame, self.index)
 
         return new_bin
 
