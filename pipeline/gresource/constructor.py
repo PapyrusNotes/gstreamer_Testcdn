@@ -17,7 +17,7 @@ class HLSConstructor:
 
     def compose_bin(self):
         new_bin = Gst.Bin.new(f"HLSBin_{self.index}")
-        src = Gst.ElementFactory.make("rtspsrc", "src")
+        src = Gst.ElementFactory.make("rtspsrc", f"src_{self.index}")
         src.set_property("latency", 2000)
         src.set_property("drop-on-latency", True)
         src.set_property("do-rtsp-keep-alive", True)
@@ -58,7 +58,7 @@ class HLSConstructor:
         appsink.set_property("emit-signals", True)
         appsink.set_property("max-buffers", 100)
         appsink.set_property("drop", True)
-        appsink.set_property("sync", True)
+        appsink.set_property("sync", False)
         appsink.connect("new-sample", on_emit_frame, self.index)
 
         Gst.Bin.add(new_bin, src)

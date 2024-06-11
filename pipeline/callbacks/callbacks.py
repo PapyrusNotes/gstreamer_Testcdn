@@ -1,9 +1,5 @@
 import queue
 
-
-from app_worker.app_worker import infer_queue
-
-
 import gi
 
 gi.require_version("Gst", "1.0")
@@ -13,7 +9,6 @@ import cairo
 import time
 import os
 
-from calculator.extractor import extract_detection_from_tensors
 from graphic.drawer import draw_bbox
 from pipeline.gresource.gframe import GstFrameWrapper
 from app_worker.app_worker import infer_queue, save_queues, frame_queue
