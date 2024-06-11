@@ -45,6 +45,7 @@ def on_start_feed(appsrc, length, save_queue_index):
         # _hv_zone_tensor = frame.get_hv_radius_result()  # detection log socket stream에 쓰임
         # _danger_zone_tensor = frame.get_danger_zone_result()  # detection log socket stream에 쓰임
     except queue.Empty:
+        print("save_queue empty")
         return True
 
     gst_buffer = frame.get_buffer()
