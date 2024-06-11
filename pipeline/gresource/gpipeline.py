@@ -13,6 +13,7 @@ class GPipeline:
     def __init__(self):
         self.pipeline = Gst.Pipeline()
         self.channels_registry = RTSP_SRC
+        self.bus = None
 
     def add_bin(self):
         for i, camera in enumerate(self.channels_registry):
@@ -28,5 +29,7 @@ class GPipeline:
     def start(self, main_loop):
         self.pipeline.set_state(Gst.State.PLAYING)
         bus = self.pipeline.get_bus()
-        bus.add_signal_watch()
-        bus.connect("message", on_message, main_loop)
+        self.bus = bus
+        self.bus.add_signal_watch()
+        self.bus.connect("message", on_message, main_loop)
+
