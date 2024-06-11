@@ -36,6 +36,9 @@ def on_start_feed(appsrc, length, save_queue_index):
         gst_buffer = Gst.Buffer.new_allocate(None, buffer_size, None)
         appsrc.emit("push-buffer", gst_buffer)
 
+    while save_queue.qsize() < 1:
+        time.sleep(0.01)
+
     try:
         frame = save_queue.get(timeout=2)  # detection log socket stream에 쓰임
         print("on_start_feed, frame hit")
