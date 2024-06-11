@@ -15,6 +15,7 @@ from app_worker.app_worker import infer_queue, save_queues, frame_queue
 
 
 def on_emit_frame(appsink, index):
+    print("on_emit_frame callback")
     gst_sample = appsink.emit("pull-sample")
     new_frame = GstFrameWrapper(gst_sample, index)
     infer_queue.put(new_frame)
@@ -22,6 +23,7 @@ def on_emit_frame(appsink, index):
 
 
 def on_start_feed(appsrc, length, save_queue_index):
+    print("on_start_Feed callback")
     # 이미지 저장 큐 지정
     save_queue = save_queues[save_queue_index]
     if save_queue is None:
@@ -60,6 +62,7 @@ def on_stop_feed():
 
 
 def on_draw(_overlay, context, _timestamp, _duration, stream_code):
+    print("on_draw callback")
     context.select_font_face('Open Sans', cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL)
     context.set_font_size(24)
     draw_bbox(context, stream_code, _timestamp)
