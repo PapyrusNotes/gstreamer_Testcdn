@@ -36,6 +36,7 @@ def on_start_feed(appsrc, length, save_queue_index):
         return True
 
     while save_queue.qsize() < 1:  # wait until save queue has frame
+        print("save_queue empty")
         time.sleep(0.001)
 
     try:
