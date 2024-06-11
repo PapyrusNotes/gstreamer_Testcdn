@@ -41,6 +41,7 @@ def on_start_feed(appsrc, length, save_queue_index):
         appsrc.emit("push-buffer", gst_buffer)
     except queue.Empty:
         print("save_queue empty")
+        time.sleep(0.5)
         return True
 
 
