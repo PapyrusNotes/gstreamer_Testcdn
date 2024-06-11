@@ -5,7 +5,7 @@ from threading import Thread
 import gi
 
 gi.require_version("Gst", "1.0")
-from gi.repository import Gst, GLib, GObject
+from gi.repository import Gst, GLib, GObject, GST_DEBUG_GRAPH_SHOW_ALL
 
 from pipeline.gresource.gpipeline import GPipeline, RTSP_SRC
 from mlmodel.manager import ModelManager
