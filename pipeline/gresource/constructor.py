@@ -62,6 +62,7 @@ class HLSConstructor:
         appsink.set_property("emit-signals", True)
         appsink.set_property("max-buffers", 3000)
         appsink.set_property("drop", True)
+        appsink.set_property("sync", True)
         appsink.connect("new-sample", on_emit_frame, self.index)
 
         Gst.Bin.add(new_bin, src)
