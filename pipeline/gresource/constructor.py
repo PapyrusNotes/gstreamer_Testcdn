@@ -60,8 +60,8 @@ class HLSConstructor:
 
         appsink = Gst.ElementFactory.make("appsink", f"appsink-{self.index}")
         appsink.set_property("emit-signals", True)
-        appsink.set_property("max-buffers", 0)
-        appsink.set_property("drop", False)
+        appsink.set_property("max-buffers", 3000)
+        appsink.set_property("drop", True)
         appsink.connect("new-sample", on_emit_frame, self.index)
 
         Gst.Bin.add(new_bin, src)
