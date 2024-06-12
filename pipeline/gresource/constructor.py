@@ -155,7 +155,6 @@ class SinkBinConstructor:
         appsrc = Gst.ElementFactory.make("appsrc", "appsrc")
         appsrc.set_property("format", Gst.Format.TIME)
         appsrc.set_property("is-live", True)
-        appsrc.set_property("block", False)
         appsrc.set_property("do-timestamp", True)
         appsrc.connect("need-data", on_start_feed, self.index)
         caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
@@ -197,7 +196,7 @@ class SinkBinConstructor:
 
         ret = ret and convert2.link(x264enc)
         if ret:
-            print("avenc linked")
+            print("x264enc linked")
 
         ret = ret and x264enc.link(mpegtsmux)
         if ret:
