@@ -35,7 +35,9 @@ def main():
     # gpipeline.start()
     pipeline = gpipeline.pipeline
     main_thread = Thread(target=app_worker.process_imaging, daemon=True)
+
     pipeline.set_state(Gst.State.PLAYING)
+    main_thread.start()
 
     while True:
         try:
