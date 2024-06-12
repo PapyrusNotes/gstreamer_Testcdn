@@ -18,7 +18,7 @@ class HLSConstructor:
     def compose_bin(self):
         new_bin = Gst.Bin.new(f"HLSBin_{self.index}")
         src = Gst.ElementFactory.make("rtspsrc", "src")
-        src.set_property("latency", 0)
+        src.set_property("latency", 2000)
         src.set_property("drop-on-latency", True)
         src.set_property("do-rtsp-keep-alive", True)
         src.set_property("udp-reconnect", True)
