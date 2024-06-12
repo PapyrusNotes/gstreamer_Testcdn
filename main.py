@@ -34,7 +34,7 @@ def main():
     gpipeline.add_bin()
     # gpipeline.start()
     pipeline = gpipeline.pipeline
-    pipeline.set_state(Gst.State.PLAYING)
+    gthread = Thread(target=gpipeline.start, daemon=True)
 
     while True:
         try:
