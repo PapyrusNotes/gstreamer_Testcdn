@@ -58,7 +58,7 @@ class HLSConstructor:
         videorate.set_property("silent", True)
         caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
 
-        appsink = Gst.ElementFactory.make("appsink", f"rtspsink-{self.index}")
+        appsink = Gst.ElementFactory.make("appsink", f"appsink-{self.index}")
         appsink.set_property("emit-signals", True)
         appsink.set_property("max-buffers", 0)
         appsink.set_property("drop", True)
