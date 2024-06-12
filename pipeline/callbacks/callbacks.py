@@ -16,6 +16,7 @@ import time
 def on_emit_frame(appsink, index):
     print("on_emit_frame callback triggerd")
     gst_sample = appsink.emit("pull-sample")
+    print("Returned gst sample : ", gst_sample)
     new_frame = GstFrameWrapper(gst_sample, index)
     infer_queue.put(new_frame)
     print("put frame into infer queue")
