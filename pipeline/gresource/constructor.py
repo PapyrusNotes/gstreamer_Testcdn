@@ -161,6 +161,8 @@ class SinkBinConstructor:
         appsrc.set_property("is-live", True)
         appsrc.set_property("do-timestamp", True)
         appsrc.set_property("max-bytes", 200000)
+        appsrc.set_property("block", False)
+        appsrc.set_property("emit-signals", True)
         appsrc.connect("need-data", on_start_feed, self.index)
         appsrc.connect("enough-data", on_halt_feed, self.index)
         caps = Gst.Caps.from_string(f"video/x-raw, format=RGB, width=1920, height=1080")
