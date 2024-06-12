@@ -14,6 +14,7 @@ import time
 
 
 def on_emit_frame(appsink, index):
+    print("on_emit_Frame hit")
     gst_sample = appsink.emit("pull-sample")
     new_frame = GstFrameWrapper(gst_sample, index)
     infer_queue.put(new_frame)

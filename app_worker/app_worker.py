@@ -22,7 +22,6 @@ class AppWorker:
     def process_imaging(self):
         try:
             frame = infer_queue.get(timeout=0)
-
             sample = frame.get_sample()
             stream_code = frame.stream_code
             save_queue_index = frame.save_queue_index
@@ -37,5 +36,4 @@ class AppWorker:
 
             save_queues[save_queue_index].put(frame)
         except queue.Empty:
-            print("No infer queue franme")
             pass
