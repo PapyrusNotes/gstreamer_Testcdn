@@ -30,6 +30,7 @@ class AppWorker:
             img_array = get_ndarray(sample)
 
             self.mlmodel.predict(img_array=img_array, input_shape=(960, 960))
+            print(self.mlmodel.predict_result)
 
             obj_tensor_result = self.mlmodel.extract_tensor()
             frame.set_obj_result(obj_tensor_result)
