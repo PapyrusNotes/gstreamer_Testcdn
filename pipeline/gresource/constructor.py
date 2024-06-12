@@ -62,7 +62,6 @@ class HLSConstructor:
         appsink.set_property("emit-signals", True)
         appsink.set_property("max-buffers", 10)
         appsink.set_property("drop", True)
-        appsink.set_property("sync", True)
         appsink.connect("new-sample", on_emit_frame, self.index)
         print("appsink on_emit_Frame connected")
 
@@ -167,6 +166,7 @@ class SinkBinConstructor:
         overlay = Gst.ElementFactory.make("cairooverlay", "overlay")
         convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
         x264enc = Gst.ElementFactory.make("x264enc", "x264enc")
+        x264enc.set_property("tune", "zerolatency")
 
         mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
         hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
