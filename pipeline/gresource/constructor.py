@@ -50,13 +50,13 @@ class HLSConstructor:
         tensor_queue.set_property("max-size-buffers", 10)
 
         avdec = Gst.ElementFactory.make("avdec_h264", "decode")  # x-264 to x-raw
-        # convert = Gst.ElementFactory.make("videoconvert", "convert")
+        convert = Gst.ElementFactory.make("videoconvert", "convert")
         # videoscale = Gst.ElementFactory.make("videoscale")
         # videorate = Gst.ElementFactory.make("videorate", f"videorate-{self.index}")
         # videorate.set_property("drop-only", True)
         # videorate.set_property("max-rate", 5)
         # videorate.set_property("silent", True)
-        caps = Gst.Caps.from_string(f"video/x-raw, format=BGR, width=1920, height=1080")
+        caps = Gst.Caps.from_string(f"video/x-raw, format=RGB, width=1920, height=1080")
 
         appsink = Gst.ElementFactory.make("appsink", f"appsink-{self.index}")
         appsink.set_property("emit-signals", True)
@@ -76,7 +76,7 @@ class HLSConstructor:
 
         Gst.Bin.add(new_bin, tensor_queue)
         Gst.Bin.add(new_bin, avdec)
-        # Gst.Bin.add(new_bin, convert)
+        Gst.Bin.add(new_bin, convert)
         # Gst.Bin.add(new_bin, videoscale)
         # Gst.Bin.add(new_bin, videorate)
         Gst.Bin.add(new_bin, appsink)
@@ -118,9 +118,9 @@ class HLSConstructor:
         if ret:
             print("avdec linked")
 
-        ret = ret and avdec.link_filtered(appsink, caps)
+        ret = ret and avdec.link(convert)
         if ret:
-            print("appsink linked")
+            print("convert linked")
         '''
         ret = ret and convert.link(videoscale)
         if ret:
@@ -134,6 +134,10 @@ class HLSConstructor:
         if ret:
             print("appsink linked")
         '''
+        ret = ret and convert.link_filtered(appsink, caps)
+        if ret:
+            print("appsink linked")
+
         if not ret:
             print("ERROR: Elements could not be linked")
             sys.exit(1)
@@ -157,7 +161,7 @@ class SinkBinConstructor:
         appsrc.set_property("is-live", True)
         appsrc.set_property("do-timestamp", True)
         appsrc.connect("need-data", on_start_feed, self.index)
-        caps = Gst.Caps.from_string(f"video/x-raw, format=BGR, width=1920, height=1080")
+        caps = Gst.Caps.from_string(f"video/x-raw, format=RGB, width=1920, height=1080")
         appsrc.set_property("caps", caps)
 
         convert = Gst.ElementFactory.make("videoconvert", "convert")
