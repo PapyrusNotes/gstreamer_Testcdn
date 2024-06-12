@@ -5,7 +5,7 @@ from gi.repository import Gst, GObject, GLib
 from .constructor import HLSConstructor, SinkBinConstructor
 
 from pipeline.cfg.cfgs import RTSP_SRC
-from pipeline.callbacks.callbacks import on_message
+from pipeline.callbacks.callbacks import on_message, on_emit_frame
 
 
 class GPipeline:
@@ -32,3 +32,4 @@ class GPipeline:
         self.bus = bus
         self.bus.add_signal_watch()
         # self.bus.connect("message", on_message, main_loop)
+        self.bus.connect("sample-emit", on_emit_frame, 0)
