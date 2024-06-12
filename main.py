@@ -34,6 +34,7 @@ def main():
     gpipeline.add_bin()
     # gpipeline.start()
     pipeline = gpipeline.pipeline
+    # main_thread = Thread(target=app_worker.process_imaging())
     pipeline.set_state(Gst.State.PLAYING)
 
     while True:
@@ -41,6 +42,7 @@ def main():
             print("this is main loop")
             app_worker.process_imaging()
         except KeyboardInterrupt:
+            print("KEYBOARD INTERRUPT")
             pipeline.set_state(Gst.State.NULL)
             # main_loop.quit()
             sys.exit(1)
