@@ -79,7 +79,7 @@ class HLSConstructor:
         # Gst.Bin.add(new_bin, convert)
         # Gst.Bin.add(new_bin, videoscale)
         # Gst.Bin.add(new_bin, videorate)
-        # Gst.Bin.add(new_bin, appsink)
+        Gst.Bin.add(new_bin, appsink)
 
         def on_pad_added(element1, pad, element2):
             string = pad.query_caps(None).to_string()
