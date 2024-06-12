@@ -32,4 +32,3 @@ class GPipeline:
         self.bus = bus
         self.bus.add_signal_watch()
         # self.bus.connect("message", on_message, main_loop)
-

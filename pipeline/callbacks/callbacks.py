@@ -31,7 +31,7 @@ def on_start_feed(appsrc, length, save_queue_index):
 
     if save_queue.qsize() < 1 or infer_queue.qsize() < 5:
         print("queue sparse reacehd")
-        time.sleep(3)
+        time.sleep(0.1)
         print("save_queue size : ", save_queue.qsize())
         print("infer_queue size : ", infer_queue.qsize())
         buffer_size = 1920 * 1080 * 3
