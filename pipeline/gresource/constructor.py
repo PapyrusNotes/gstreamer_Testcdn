@@ -31,7 +31,6 @@ class HLSConstructor:
         parse = Gst.ElementFactory.make("h264parse", "parse")
 
         tee = Gst.ElementFactory.make("tee", "tee")
-        tee.set_property("num-src-pads", 2)
 
         # Original video sinking branch
         video_queue = Gst.ElementFactory.make("queue", "video_queue")
