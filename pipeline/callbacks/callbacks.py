@@ -14,12 +14,9 @@ import time
 
 
 def on_emit_frame(appsink, index):
-    print("on_emit_frame callback triggerd")
     gst_sample = appsink.emit("pull-sample")
-    print("Returned gst sample : ", gst_sample)
     new_frame = GstFrameWrapper(gst_sample, index)
     infer_queue.put(new_frame)
-    print("put frame into infer queue")
     return True
 
 
@@ -46,12 +43,9 @@ def on_start_feed(appsrc, length, save_queue_index):
         _obj_tensor = frame.get_obj_result()  # detection log socket stream에 쓰임
         # _hv_zone_tensor = frame.get_hv_radius_result()  # detection log socket stream에 쓰임
         # _danger_zone_tensor = frame.get_danger_zone_result()  # detection log socket stream에 쓰임
-        print("pushing gst Buffer reached")
         gst_buffer = frame.get_buffer()
         appsrc.emit("push-buffer", gst_buffer)  # App pushes to data to gpipeline
     except queue.Empty:
-        print("save_Queue is empty")
-        time.sleep(1)
         return True
 
 
