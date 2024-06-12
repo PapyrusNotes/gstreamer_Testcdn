@@ -30,12 +30,10 @@ def on_start_feed(appsrc, length, save_queue_index):
 
     if save_queue.qsize() < 1 or infer_queue.qsize() < 5:
         print("queue sparse reacehd")
-        time.sleep(1)
+        time.sleep(0.01)
         buffer_size = 1920 * 1080 * 3
         gst_buffer = Gst.Buffer.new_allocate(None, buffer_size, None)
         appsrc.emit("push-buffer", gst_buffer)
-        for _ in (0, len(save_queues)):
-            appsrc.emit("push-buffer", gst_buffer)
 
     try:
         frame = save_queue.get(timeout=0)  # detection log socket stream에 쓰임
