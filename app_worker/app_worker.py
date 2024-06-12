@@ -20,24 +20,20 @@ class AppWorker:
         self.infer_queues = []
 
     def process_imaging(self):
-        while True:
-            try:
-                frame = infer_queue.get()
-                print("infer queue frame hit")
-                sample = frame.get_sample()
-                stream_code = frame.stream_code
-                save_queue_index = frame.save_queue_index
+        try:
+            frame = infer_queue.get()
+            sample = frame.get_sample()
+            stream_code = frame.stream_code
+            save_queue_index = frame.save_queue_index
 
-                img_array = get_ndarray(sample)
+            img_array = get_ndarray(sample)
 
-                self.mlmodel.predict(img_array=img_array, input_shape=(960, 960))
-                print(self.mlmodel.predict_result)
+            self.mlmodel.predict(img_array=img_array, input_shape=(960, 960))
 
-                obj_tensor_result = self.mlmodel.extract_tensor()
-                frame.set_obj_result(obj_tensor_result)
-                obj_tensor[f'{stream_code}'] = obj_tensor_result
+            obj_tensor_result = self.mlmodel.extract_tensor()
+            frame.set_obj_result(obj_tensor_result)
+            obj_tensor[f'{stream_code}'] = obj_tensor_result
 
-                save_queues[save_queue_index].put(frame)
-            except queue.Empty:
-                print("infer queue is empty")
-                pass
+            save_queues[save_queue_index].put(frame)
+        except queue.Empty:
+            pass
