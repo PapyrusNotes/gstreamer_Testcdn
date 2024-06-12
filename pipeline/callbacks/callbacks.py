@@ -28,6 +28,7 @@ def on_start_feed(appsrc, length, save_queue_index):
         print(f"save_queue {save_queue_index} is None")
         return False
 
+    '''
     if save_queue.qsize() < 1 or infer_queue.qsize() < 5:
         print("queue sparse reacehd")
         time.sleep(1)
@@ -36,7 +37,7 @@ def on_start_feed(appsrc, length, save_queue_index):
         appsrc.emit("push-buffer", gst_buffer)
         for _ in (0, len(save_queues)):
             appsrc.emit("push-buffer", gst_buffer)
-
+    '''
     try:
         frame = save_queue.get(timeout=0)  # detection log socket stream에 쓰임
         print("on_start_feed, frame hit")
