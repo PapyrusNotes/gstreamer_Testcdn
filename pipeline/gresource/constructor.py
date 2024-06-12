@@ -49,14 +49,14 @@ class HLSConstructor:
         tensor_queue = Gst.ElementFactory.make("queue", "tensor_queue")
         tensor_queue.set_property("max-size-buffers", 10)
 
-        avdec = Gst.ElementFactory.make("avdec_h264", "decode")
+        avdec = Gst.ElementFactory.make("avdec_h264", "decode")  # x-264 to x-raw
         convert = Gst.ElementFactory.make("videoconvert", "convert")
         videoscale = Gst.ElementFactory.make("videoscale")
         videorate = Gst.ElementFactory.make("videorate", f"videorate-{self.index}")
         videorate.set_property("drop-only", True)
         videorate.set_property("max-rate", 5)
         videorate.set_property("silent", True)
-        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
+        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)BGR, width=(int)1920, height=(int)1080")
 
         appsink = Gst.ElementFactory.make("appsink", f"appsink-{self.index}")
         appsink.set_property("emit-signals", True)
@@ -157,7 +157,7 @@ class SinkBinConstructor:
         appsrc.set_property("is-live", True)
         appsrc.set_property("do-timestamp", True)
         appsrc.connect("need-data", on_start_feed, self.index)
-        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
+        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)BGR, width=(int)1920, height=(int)1080")
         appsrc.set_property("caps", caps)
 
         convert = Gst.ElementFactory.make("videoconvert", "convert")
