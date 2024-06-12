@@ -32,4 +32,4 @@ class GPipeline:
         self.bus = bus
         self.bus.add_signal_watch()
         # self.bus.connect("message", on_message, main_loop)
-        self.bus.connect("sample-emit", on_emit_frame, 0)
+        self.bus.connect("new-sample", on_emit_frame, 0)
