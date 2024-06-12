@@ -21,7 +21,7 @@ class AppWorker:
 
     def process_imaging(self):
         try:
-            frame = infer_queue.get()
+            frame = infer_queue.get(timeout=0)
             sample = frame.get_sample()
             stream_code = frame.stream_code
             save_queue_index = frame.save_queue_index
