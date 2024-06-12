@@ -6,7 +6,7 @@ from gi.repository import Gst, GstRtsp
 
 import sys
 
-from pipeline.callbacks.callbacks import on_emit_frame, on_start_feed
+from pipeline.callbacks.callbacks import on_emit_frame, on_start_feed, on_halt_feed
 
 
 class HLSConstructor:
