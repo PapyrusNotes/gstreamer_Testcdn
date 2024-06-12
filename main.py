@@ -39,7 +39,6 @@ def main():
 
     while True:
         try:
-            print("this is main thread loop")
             app_worker.process_imaging()
         except KeyboardInterrupt:
             print("KEYBOARD INTERRUPT")
