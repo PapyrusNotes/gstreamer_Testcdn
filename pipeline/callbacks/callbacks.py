@@ -38,7 +38,6 @@ def on_start_feed(appsrc, length, save_queue_index):
         appsrc.emit("push-buffer", gst_buffer)
         for _ in (0, len(save_queues)):
             appsrc.emit("push-buffer", gst_buffer)
-        return True
 
     try:
         frame = save_queue.get(timeout=0)  # detection log socket stream에 쓰임
