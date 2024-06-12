@@ -63,7 +63,6 @@ class HLSConstructor:
         appsink.set_property("max-buffers", 0)
         appsink.set_property("drop", True)
         appsink.connect("new-sample", on_emit_frame, self.index)
-        print("appsink on_emit_Frame connected")
 
         Gst.Bin.add(new_bin, src)
         Gst.Bin.add(new_bin, depay)
