@@ -35,6 +35,7 @@ def main():
     # gpipeline.start()
     pipeline = gpipeline.pipeline
     gthread = Thread(target=gpipeline.start, daemon=True)
+    gthread.start()
 
     while True:
         try:
