@@ -21,9 +21,6 @@ class AppWorker:
 
     def process_imaging(self):
         try:
-            if infer_queue.qsize() < 1:
-                time.sleep(0.01)
-                print("infer_queue lack of frame")
             frame = infer_queue.get()
             print("infer queue frame hit")
             sample = frame.get_sample()
