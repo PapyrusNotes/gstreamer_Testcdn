@@ -50,12 +50,12 @@ class HLSConstructor:
         tensor_queue.set_property("max-size-buffers", 10)
 
         avdec = Gst.ElementFactory.make("avdec_h264", "decode")  # x-264 to x-raw
-        convert = Gst.ElementFactory.make("videoconvert", "convert")
-        videoscale = Gst.ElementFactory.make("videoscale")
-        videorate = Gst.ElementFactory.make("videorate", f"videorate-{self.index}")
-        videorate.set_property("drop-only", True)
-        videorate.set_property("max-rate", 5)
-        videorate.set_property("silent", True)
+        # convert = Gst.ElementFactory.make("videoconvert", "convert")
+        # videoscale = Gst.ElementFactory.make("videoscale")
+        # videorate = Gst.ElementFactory.make("videorate", f"videorate-{self.index}")
+        # videorate.set_property("drop-only", True)
+        # videorate.set_property("max-rate", 5)
+        # videorate.set_property("silent", True)
         caps = Gst.Caps.from_string(f"video/x-raw, format=RGB, width=1920, height=1080")
 
         appsink = Gst.ElementFactory.make("appsink", f"appsink-{self.index}")
@@ -76,10 +76,10 @@ class HLSConstructor:
 
         Gst.Bin.add(new_bin, tensor_queue)
         Gst.Bin.add(new_bin, avdec)
-        Gst.Bin.add(new_bin, convert)
-        Gst.Bin.add(new_bin, videoscale)
-        Gst.Bin.add(new_bin, videorate)
-        Gst.Bin.add(new_bin, appsink)
+        # Gst.Bin.add(new_bin, convert)
+        # Gst.Bin.add(new_bin, videoscale)
+        # Gst.Bin.add(new_bin, videorate)
+        # Gst.Bin.add(new_bin, appsink)
 
         def on_pad_added(element1, pad, element2):
             string = pad.query_caps(None).to_string()
@@ -118,10 +118,10 @@ class HLSConstructor:
         if ret:
             print("avdec linked")
 
-        ret = ret and avdec.link(convert)
+        ret = ret and avdec.link_filtered(appsink, caps)
         if ret:
-            print("convert linked")
-
+            print("appsink linked")
+        '''
         ret = ret and convert.link(videoscale)
         if ret:
             print("videscale linked")
@@ -133,7 +133,7 @@ class HLSConstructor:
         ret = ret and videorate.link_filtered(appsink, caps)
         if ret:
             print("appsink linked")
-
+        '''
         if not ret:
             print("ERROR: Elements could not be linked")
             sys.exit(1)
