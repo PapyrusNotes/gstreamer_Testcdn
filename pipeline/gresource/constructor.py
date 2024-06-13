@@ -113,18 +113,18 @@ class HLSConstructor:
             print("hlssink linked")
 
         # Extracting tensors branch
-        ret = ret and tee.link(convert2)
+        ret = ret and tee.link(tensor_queue)
+        if ret:
+            print("tensor_queue linked")
+
+        ret = ret and tensor_queue.link(convert2)
         if ret:
             print("convert2 linked")
 
         ret = ret and convert2.link(avdec)
         if ret:
             print("avdec linked")
-        '''
-        ret = ret and tensor_queue.link(avdec)
-        if ret:
-            print("avdec linked")
-        '''
+
         ret = ret and avdec.link(convert)
         if ret:
             print("convert linked")
