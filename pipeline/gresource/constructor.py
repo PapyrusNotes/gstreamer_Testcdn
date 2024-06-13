@@ -117,7 +117,7 @@ class HLSConstructor:
         if ret:
             print("tensor_queue linked")
 
-        ret = ret and tensor_queue.link(convert2)
+        ret = ret and tensor_queue.link_filtered(convert2, caps)
         if ret:
             print("convert2 linked")
 
