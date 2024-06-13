@@ -98,7 +98,7 @@ class HLSConstructor:
             print("tee linked")
 
         # Link Original video sinking branch
-        ret = ret and tee.link(video_queue)
+        ret = ret and parse.link(video_queue)  ##
         if ret:
             print("video_queue linked")
 
@@ -111,7 +111,7 @@ class HLSConstructor:
             print("hlssink linked")
 
         # Extracting tensors branch
-        ret = ret and tee.link(tensor_queue)
+        ret = ret and parse.link(tensor_queue)  ##
         if ret:
             print("tensor_queue linked")
 
