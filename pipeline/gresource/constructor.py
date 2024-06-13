@@ -103,6 +103,7 @@ class HLSConstructor:
             element1.link(element2)
 
         src.connect("pad-added", on_pad_added, depay)
+        src2.connect("pad-added", on_pad_added, depay2)
 
         ret = depay.link(parse)
         if ret:
@@ -126,7 +127,7 @@ class HLSConstructor:
             print("hlssink linked")
 
         # Extracting tensors branch
-        src2.connect("pad-added", on_pad_added, depay2)
+        # src2.connect("pad-added", on_pad_added, depay2)
 
         ret = ret and depay2.link(parse2)
         if ret:
