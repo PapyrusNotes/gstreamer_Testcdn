@@ -31,7 +31,7 @@ class HLSConstructor:
         src2.set_property("drop-on-latency", True)
         src2.set_property("do-rtsp-keep-alive", True)
         src2.set_property("udp-reconnect", True)
-        src2.set_property("location", self.rtsp_src)
+        src2.set_property("location", "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/01/media.smp")
         src2.set_property("do-retransmission", False)
         src2.set_property("protocols", GstRtsp.RTSPLowerTrans.UDP)
 
