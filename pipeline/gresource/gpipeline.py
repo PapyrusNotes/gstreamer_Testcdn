@@ -2,7 +2,7 @@ import gi
 
 gi.require_version("Gst", "1.0")
 from gi.repository import Gst, GObject, GLib
-from .constructor import HLSConstructor, SinkBinConstructor
+from .constructor import HLSConstructor, InferHLSConstructor, AppSinkConstructor
 
 from pipeline.cfg.cfgs import RTSP_SRC
 from pipeline.callbacks.callbacks import on_message, on_emit_frame
@@ -22,9 +22,14 @@ class GPipeline:
             self.pipeline.add(hls_bin)
 
         for i, camera in enumerate(self.channels_registry):
-            sink_bin_constructor = SinkBinConstructor(i, self.pipeline)
-            sink_bin = sink_bin_constructor.compose_bin()
-            self.pipeline.add(sink_bin)
+            appsink_bin_constructor = AppSinkConstructor(camera, i)
+            appsink_bin = appsink_bin_constructor .compose_bin()
+            self.pipeline.add(appsink_bin)
+
+        for i, camera in enumerate(self.channels_registry):
+            infer_hls_bin_constructor = InferHLSConstructor(i, self.pipeline)
+            infer_hls_bin = infer_hls_bin_constructor.compose_bin()
+            self.pipeline.add(infer_hls_bin)
 
     def start(self):
         self.pipeline.set_state(Gst.State.PLAYING)

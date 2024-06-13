@@ -17,58 +17,77 @@ class HLSConstructor:
 
     def compose_bin(self):
         new_bin = Gst.Bin.new(f"HLSBin_{self.index}")
-        src = Gst.ElementFactory.make("rtspsrc", "src")
-        src.set_property("latency", 2000)
-        src.set_property("drop-on-latency", True)
-        src.set_property("do-rtsp-keep-alive", True)
-        src.set_property("udp-reconnect", True)
-        src.set_property("location", self.rtsp_src)
-        src.set_property("do-retransmission", False)
-        src.set_property("protocols", GstRtsp.RTSPLowerTrans.UDP)
-
-        src2 = Gst.ElementFactory.make("rtspsrc", "src2")
-        src2.set_property("latency", 2000)
-        src2.set_property("drop-on-latency", True)
-        src2.set_property("do-rtsp-keep-alive", True)
-        src2.set_property("udp-reconnect", True)
-        src2.set_property("location", "rtsp://admin:daolcnc3470@211.225.156.126:558/LiveChannel/01/media.smp")
-        src2.set_property("do-retransmission", False)
-        src2.set_property("protocols", GstRtsp.RTSPLowerTrans.UDP)
+        rtsp_src = Gst.ElementFactory.make("rtspsrc", f"rtsp_hls_src={self.index}")
+        rtsp_src.set_property("latency", 2000)
+        rtsp_src.set_property("drop-on-latency", True)
+        rtsp_src.set_property("do-rtsp-keep-alive", True)
+        rtsp_src.set_property("udp-reconnect", True)
+        rtsp_src.set_property("location", self.rtsp_src)
+        rtsp_src.set_property("do-retransmission", False)
+        rtsp_src.set_property("protocols", GstRtsp.RTSPLowerTrans.UDP)
 
         depay = Gst.ElementFactory.make("rtph264depay", "depay")
-
         parse = Gst.ElementFactory.make("h264parse", "parse")
-
-        depay2 = Gst.ElementFactory.make("rtph264depay", "depay2")
-
-        parse2 = Gst.ElementFactory.make("h264parse", "parse2")
-
-        tee = Gst.ElementFactory.make("tee", "tee")
-
-        # Original video sinking branch
-        video_queue = Gst.ElementFactory.make("queue", "video_queue")
-        video_queue.set_property("max-size-buffers", 10)
-
         mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
-        hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
 
+        hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
         hlssink.set_property("max-files", 10)
         hlssink.set_property("playlist-length", 5)
         hlssink.set_property("location", f"/home/infer1/hls/output_{self.index}%05d.ts")
         hlssink.set_property("playlist-location", f"/home/infer1/hls/output_{self.index}.m3u8")
         hlssink.set_property("target-duration", 5)
 
-        # Extracting tensors branch
-        tensor_queue = Gst.ElementFactory.make("queue", "tensor_queue")
-        tensor_queue.set_property("max-size-buffers", 10)
+        Gst.Bin.add(new_bin, rtsp_src)
+        Gst.Bin.add(new_bin, depay)
+        Gst.Bin.add(new_bin, parse)
+        Gst.Bin.add(new_bin, mpegtsmux)
+        Gst.Bin.add(new_bin, hlssink)
 
+        def on_pad_added(element1, pad, element2):
+            string = pad.query_caps(None).to_string()
+            print("********pad.name********", pad.name)
+            element1.link(element2)
+
+        rtsp_src.connect("pad-added", on_pad_added, depay)
+        print("HLS Bin : rtsp - depay connected")
+
+        ret = depay.link(parse)
+        if ret:
+            print("HLS Bin : depay - parse connected")
+
+        ret = ret and parse.link(mpegtsmux)
+        if ret:
+            print("HLS Bin : parse - mpegtsmux connected")
+
+        ret = ret and mpegtsmux.link(hlssink)
+        if ret:
+            print("HLS Bin : mpegtsmux - hlssink connected")
+
+        return new_bin
+
+
+class AppSinkConstructor:
+    def __init__(self, rtsp_src, index):
+        self.rtsp_src = rtsp_src
+        self.index = index
+
+    def compose_bin(self):
+        new_bin = Gst.Bin.new(f"AppSink-{self.index}")
+
+        rtsp_infer_src = Gst.ElementFactory.make("rtspsrc", f"rtsp_infer_src-{self.index}")
+        rtsp_infer_src.set_property("latency", 2000)
+        rtsp_infer_src.set_property("drop-on-latency", True)
+        rtsp_infer_src.set_property("do-rtsp-keep-alive", True)
+        rtsp_infer_src.set_property("udp-reconnect", True)
+        rtsp_infer_src.set_property("location", self.rtsp_src)
+        rtsp_infer_src.set_property("do-retransmission", False)
+        rtsp_infer_src.set_property("protocols", GstRtsp.RTSPLowerTrans.UDP)
+
+        depay = Gst.ElementFactory.make("rtph264depay", "depay2")
+        parse = Gst.ElementFactory.make("h264parse", "parse2")
         avdec = Gst.ElementFactory.make("avdec_h264", "decode")  # x-264 to x-raw
         convert = Gst.ElementFactory.make("videoconvert", "convert")
-        # videoscale = Gst.ElementFactory.make("videoscale")
-        # videorate = Gst.ElementFactory.make("videorate", f"videorate-{self.index}")
-        # videorate.set_property("drop-only", True)
-        # videorate.set_property("max-rate", 5)
-        # videorate.set_property("silent", True)
+
         caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
 
         appsink = Gst.ElementFactory.make("appsink", f"appsink-{self.index}")
@@ -78,23 +97,11 @@ class HLSConstructor:
         appsink.set_property("sync", False)
         appsink.connect("new-sample", on_emit_frame, self.index)
 
-        Gst.Bin.add(new_bin, src)
+        Gst.Bin.add(new_bin, rtsp_infer_src)
         Gst.Bin.add(new_bin, depay)
         Gst.Bin.add(new_bin, parse)
-        Gst.Bin.add(new_bin, depay2)
-        Gst.Bin.add(new_bin, parse2)
-
-        Gst.Bin.add(new_bin, tee)
-
-        Gst.Bin.add(new_bin, video_queue)
-        Gst.Bin.add(new_bin, mpegtsmux)
-        Gst.Bin.add(new_bin, hlssink)
-
-        Gst.Bin.add(new_bin, tensor_queue)
         Gst.Bin.add(new_bin, avdec)
         Gst.Bin.add(new_bin, convert)
-        # Gst.Bin.add(new_bin, videoscale)
-        # Gst.Bin.add(new_bin, videorate)
         Gst.Bin.add(new_bin, appsink)
 
         def on_pad_added(element1, pad, element2):
@@ -102,89 +109,44 @@ class HLSConstructor:
             print("********pad.name********", pad.name)
             element1.link(element2)
 
-        src.connect("pad-added", on_pad_added, depay)
-        src2.connect("pad-added", on_pad_added, depay2)
+        rtsp_infer_src.connect("pad-added", on_pad_added, depay)
+        print("AppSink Bin : rtsp - depay connected")
 
         ret = depay.link(parse)
         if ret:
-            print("parse linked")
+            print("AppSink Bin : depay - parse connected")
 
-        ret = ret and parse.link(video_queue)
+        ret = parse.link(avdec)
         if ret:
-            print("video_queue linked")
-        '''
-        # Link Original video sinking branch
-        ret = ret and tee.link(video_queue)
-        if ret:
-            print("video_queue linked")
-        '''
-        ret = ret and video_queue.link(mpegtsmux)
-        if ret:
-            print("mpegtsmux linked")
+            print("AppSink Bin : parse - avdec connected")
 
-        ret = ret and mpegtsmux.link(hlssink)
+        ret = avdec.link(convert)
         if ret:
-            print("hlssink linked")
-
-        # Extracting tensors branch
-        # src2.connect("pad-added", on_pad_added, depay2)
-
-        ret = ret and depay2.link(parse2)
-        if ret:
-            print("parse2 linked")
-
-        ret = ret and parse2.link(tensor_queue)
-        if ret:
-            print("tensor_queue linked")
-        '''
-        ret = ret and tee.link(tensor_queue)
-        if ret:
-            print("tensor_queue linked")
-        '''
-        ret = ret and tensor_queue.link(avdec)
-        if ret:
-            print("avdec linked")
-
-        ret = ret and avdec.link(convert)
-        if ret:
-            print("convert linked")
-        '''
-        ret = ret and convert.link(videoscale)
-        if ret:
-            print("videscale linked")
-
-        ret = ret and videoscale.link(videorate)
-        if ret:
-            print("videorate linked")
-
-        ret = ret and videorate.link_filtered(appsink, caps)
-        if ret:
-            print("appsink linked")
-        '''
+            print("AppSink Bin : avdec - convert connected")
 
         ret = ret and convert.link_filtered(appsink, caps)
         if ret:
-            print("appsink linked")
+            print("AppSink Bin : convert - caps - appsink connected")
 
         if not ret:
-            print("ERROR: Elements could not be linked")
+            print("AppSink Bin ERROR: Elements could not be linked")
             sys.exit(1)
         else:
-            print("DONE: All elements linked")
+            print("AppSink Bin DONE: All elements linked")
 
         return new_bin
 
 
-class SinkBinConstructor:
+
+class InferHLSConstructor:
     def __init__(self, index, pipeline):
         self.index = index
-        self.src = 'RTSP'
         self.pipeline = pipeline
 
     def compose_bin(self):
         new_bin = Gst.Bin.new(f"HLS_Inference-{self.index}")
 
-        appsrc = Gst.ElementFactory.make("appsrc", "appsrc")
+        appsrc = Gst.ElementFactory.make("appsrc", f"appsrc-{self.index}")
         appsrc.set_property("format", Gst.Format.TIME)
         appsrc.set_property("is-live", True)
         appsrc.set_property("do-timestamp", True)
@@ -220,26 +182,32 @@ class SinkBinConstructor:
 
         ret = appsrc.link(convert)
         if ret:
-            print("convert linked")
+            print("InferHLS Bin : appsrc - convert connected")
 
         ret = convert.link(overlay)
         if ret:
-            print("overlay linked")
+            print("InferHLS Bin : convert - overlay connected")
 
         ret = overlay.link(convert2)
         if ret:
-            print("convert2 linked")
+            print("InferHLS Bin : overlay - convert2 connected")
 
         ret = ret and convert2.link(x264enc)
         if ret:
-            print("x264enc linked")
+            print("InferHLS Bin : convert2 - x264enc connected")
 
         ret = ret and x264enc.link(mpegtsmux)
         if ret:
-            print("mpegtsmux linked")
+            print("InferHLS Bin : x264enc - mpegtsmux connected")
 
         ret = ret and mpegtsmux.link(hlssink)
         if ret:
-            print("hlssink linked")
+            print("InferHLS Bin : mpegtsmux - hlssink connected")
+
+        if not ret:
+            print("InferHLS Bin ERROR: Elements could not be linked")
+            sys.exit(1)
+        else:
+            print("InferHLS Bin DONE: All elements linked")
 
         return new_bin
