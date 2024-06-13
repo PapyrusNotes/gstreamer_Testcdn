@@ -17,7 +17,10 @@ def on_emit_frame(appsink, index):
     print("Appsink CALL BACK : on_emit_Frame hit")
     gst_sample = appsink.emit("pull-sample")
     new_frame = GstFrameWrapper(gst_sample, index)
-    infer_queue.put(new_frame)
+    try:
+        infer_queue.put(new_frame, timeout=0)
+    except queue.Full:
+        print("Appsink CALL BACK : infer_queue FULL")
     return True
 
 
