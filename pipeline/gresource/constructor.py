@@ -135,10 +135,11 @@ class HLSConstructor:
         if ret:
             print("appsink linked")
         '''
-        ret = ret and convert.link_filtered(appsink, caps)
+        ###
+        ret = ret and convert.link(appsink)
         if ret:
             print("appsink linked")
-
+        ###
         if not ret:
             print("ERROR: Elements could not be linked")
             sys.exit(1)
