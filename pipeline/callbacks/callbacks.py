@@ -14,7 +14,7 @@ import time
 
 
 def on_emit_frame(appsink, index):
-    print("on_emit_Frame hit")
+    print("Appsink CALL BACK : on_emit_Frame hit")
     gst_sample = appsink.emit("pull-sample")
     new_frame = GstFrameWrapper(gst_sample, index)
     infer_queue.put(new_frame)
@@ -23,24 +23,24 @@ def on_emit_frame(appsink, index):
 
 def on_start_feed(appsrc, length, save_queue_index):
     # Frame 저장 큐 지정
-    print("call back on_start_feed reacehd")
+    print("Appsrc CALL BACK : on_start_feed reacehd")
     save_queue = save_queues[save_queue_index]
     if save_queue is None:
-        print(f"save_queue {save_queue_index} is None")
+        print(f"Appsrc CALL BACK : save_queue {save_queue_index} is None")
         return False
 
     if save_queue.qsize() < 1 or infer_queue.qsize() < 5:
-        print("queue sparse reacehd")
+        print("Appsrc CALL BACK : queue sparse reacehd")
         time.sleep(0.1)
-        print("save_queue size : ", save_queue.qsize())
-        print("infer_queue size : ", infer_queue.qsize())
+        print("Appsrc CALL BACK : save_queue size : ", save_queue.qsize())
+        print("Appsrc CALL BACK : infer_queue size : ", infer_queue.qsize())
         buffer_size = 1920 * 1080 * 3
         gst_buffer = Gst.Buffer.new_allocate(None, buffer_size, None)
         appsrc.emit("push-buffer", gst_buffer)
 
     try:
         frame = save_queue.get(timeout=0)  # detection log socket stream에 쓰임
-        print("on_start_feed, frame hit")
+        print("Appsrc CALL BACK : on_start_feed, frame hit")
         _obj_tensor = frame.get_obj_result()  # detection log socket stream에 쓰임
         # _hv_zone_tensor = frame.get_hv_radius_result()  # detection log socket stream에 쓰임
         # _danger_zone_tensor = frame.get_danger_zone_result()  # detection log socket stream에 쓰임
@@ -51,7 +51,7 @@ def on_start_feed(appsrc, length, save_queue_index):
 
 
 def on_halt_feed():
-    print("Enough data : Halt feed")
+    print("Appsrc CALL BACK : Enough data : Halt feed")
     time.sleep(1)
     return True
 
