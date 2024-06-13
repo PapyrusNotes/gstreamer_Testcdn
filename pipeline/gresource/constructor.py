@@ -51,6 +51,7 @@ class HLSConstructor:
 
         avdec = Gst.ElementFactory.make("avdec_h264", "decode")  # x-264 to x-raw
         convert = Gst.ElementFactory.make("videoconvert", "convert")
+        convert2 = Gst.ElementFactory.make("videoconvert", "convert2")  # For tensor branch
         # videoscale = Gst.ElementFactory.make("videoscale")
         # videorate = Gst.ElementFactory.make("videorate", f"videorate-{self.index}")
         # videorate.set_property("drop-only", True)
@@ -76,6 +77,7 @@ class HLSConstructor:
         Gst.Bin.add(new_bin, hlssink)
 
         Gst.Bin.add(new_bin, tensor_queue)
+        Gst.Bin.add(new_bin, convert2)
         Gst.Bin.add(new_bin, avdec)
         Gst.Bin.add(new_bin, convert)
         # Gst.Bin.add(new_bin, videoscale)
@@ -111,14 +113,18 @@ class HLSConstructor:
             print("hlssink linked")
 
         # Extracting tensors branch
-        ret = ret and tee.link(tensor_queue)
+        ret = ret and tee.link(convert2)
         if ret:
-            print("tensor_queue linked")
+            print("convert2 linked")
 
+        ret = ret and convert2.link(avdec)
+        if ret:
+            print("avdec linked")
+        '''
         ret = ret and tensor_queue.link(avdec)
         if ret:
             print("avdec linked")
-
+        '''
         ret = ret and avdec.link(convert)
         if ret:
             print("convert linked")
