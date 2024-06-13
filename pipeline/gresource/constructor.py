@@ -51,13 +51,12 @@ class HLSConstructor:
 
         avdec = Gst.ElementFactory.make("avdec_h264", "decode")  # x-264 to x-raw
         convert = Gst.ElementFactory.make("videoconvert", "convert")
-        convert2 = Gst.ElementFactory.make("videoconvert", "convert2")  # For tensor branch
         # videoscale = Gst.ElementFactory.make("videoscale")
         # videorate = Gst.ElementFactory.make("videorate", f"videorate-{self.index}")
         # videorate.set_property("drop-only", True)
         # videorate.set_property("max-rate", 5)
         # videorate.set_property("silent", True)
-        caps = Gst.Caps.from_string(f"video/x-raw, format=RGB, width=1920, height=1080")
+        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1920, height=(int)1080")
 
         appsink = Gst.ElementFactory.make("appsink", f"appsink-{self.index}")
         appsink.set_property("emit-signals", True)
@@ -77,7 +76,6 @@ class HLSConstructor:
         Gst.Bin.add(new_bin, hlssink)
 
         Gst.Bin.add(new_bin, tensor_queue)
-        Gst.Bin.add(new_bin, convert2)
         Gst.Bin.add(new_bin, avdec)
         Gst.Bin.add(new_bin, convert)
         # Gst.Bin.add(new_bin, videoscale)
@@ -117,11 +115,7 @@ class HLSConstructor:
         if ret:
             print("tensor_queue linked")
 
-        ret = ret and tensor_queue.link_filtered(convert2, caps)
-        if ret:
-            print("convert2 linked")
-
-        ret = ret and convert2.link(avdec)
+        ret = ret and tensor_queue.link(avdec)
         if ret:
             print("avdec linked")
 
