@@ -92,11 +92,11 @@ class HLSConstructor:
         ret = depay.link(parse)
         if ret:
             print("parse linked")
-
+        '''
         ret = ret and parse.link(tee)
         if ret:
             print("tee linked")
-
+        '''
         # Link Original video sinking branch
         ret = ret and parse.link(video_queue)  ##
         if ret:
