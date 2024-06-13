@@ -108,15 +108,15 @@ class HLSConstructor:
         if ret:
             print("parse linked")
 
-        ret = ret and parse.link(tee)
+        ret = ret and parse.link(video_queue)
         if ret:
-            print("tee linked")
-
+            print("video_queue linked")
+        '''
         # Link Original video sinking branch
         ret = ret and tee.link(video_queue)
         if ret:
             print("video_queue linked")
-
+        '''
         ret = ret and video_queue.link(mpegtsmux)
         if ret:
             print("mpegtsmux linked")
