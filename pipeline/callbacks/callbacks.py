@@ -50,7 +50,7 @@ def on_start_feed(appsrc, length, save_queue_index):
         return True
 
 
-def on_halt_feed():
+def on_halt_feed(appsrc, udata):
     print("Appsrc CALL BACK : Enough data : Halt feed")
     time.sleep(1)
     return True
