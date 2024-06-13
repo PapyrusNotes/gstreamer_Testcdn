@@ -26,9 +26,22 @@ class HLSConstructor:
         src.set_property("do-retransmission", False)
         src.set_property("protocols", GstRtsp.RTSPLowerTrans.UDP)
 
+        src2 = Gst.ElementFactory.make("rtspsrc", "src2")
+        src2.set_property("latency", 2000)
+        src2.set_property("drop-on-latency", True)
+        src2.set_property("do-rtsp-keep-alive", True)
+        src2.set_property("udp-reconnect", True)
+        src2.set_property("location", self.rtsp_src)
+        src2.set_property("do-retransmission", False)
+        src2.set_property("protocols", GstRtsp.RTSPLowerTrans.UDP)
+
         depay = Gst.ElementFactory.make("rtph264depay", "depay")
 
         parse = Gst.ElementFactory.make("h264parse", "parse")
+
+        depay2 = Gst.ElementFactory.make("rtph264depay", "depay2")
+
+        parse2 = Gst.ElementFactory.make("h264parse", "parse2")
 
         tee = Gst.ElementFactory.make("tee", "tee")
 
@@ -68,6 +81,8 @@ class HLSConstructor:
         Gst.Bin.add(new_bin, src)
         Gst.Bin.add(new_bin, depay)
         Gst.Bin.add(new_bin, parse)
+        Gst.Bin.add(new_bin, depay2)
+        Gst.Bin.add(new_bin, parse2)
 
         Gst.Bin.add(new_bin, tee)
 
@@ -111,10 +126,20 @@ class HLSConstructor:
             print("hlssink linked")
 
         # Extracting tensors branch
+        src2.connect("pad-added", on_pad_added, depay2)
+
+        ret = ret and depay2.link(parse2)
+        if ret:
+            print("parse2 linked")
+
+        ret = ret and parse2.link(tensor_queue)
+        if ret:
+            print("tensor_queue linked")
+        '''
         ret = ret and tee.link(tensor_queue)
         if ret:
             print("tensor_queue linked")
-
+        '''
         ret = ret and tensor_queue.link(avdec)
         if ret:
             print("avdec linked")
