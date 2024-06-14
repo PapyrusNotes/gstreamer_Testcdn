@@ -164,6 +164,7 @@ class InferHLSConstructor:
 
         convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
         encode_queue = Gst.ElementFactory.make("queue", "decode_queue")
+        encode_queue.set_properpty("max-size-buffers", 400)
 
         x264enc = Gst.ElementFactory.make("x264enc", "x264enc")
         x264enc.set_property("tune", "zerolatency")
