@@ -18,7 +18,7 @@ def on_emit_frame(appsink, index):
     gst_sample = appsink.emit("pull-sample")
     new_frame = GstFrameWrapper(gst_sample, index)
     try:
-        infer_queue.put(new_frame, timeout=0)
+        infer_queue.put(new_frame, timeout=1)
     except queue.Full:
         print("Appsink CALL BACK : infer_queue FULL")
     return True
@@ -42,7 +42,7 @@ def on_start_feed(appsrc, length, save_queue_index):
         appsrc.emit("push-buffer", gst_buffer)
 
     try:
-        frame = save_queue.get(timeout=0)  # detection log socket stream에 쓰임
+        frame = save_queue.get(timeout=1)  # detection log socket stream에 쓰임
         print("Appsrc CALL BACK : on_start_feed, frame hit")
         _obj_tensor = frame.get_obj_result()  # detection log socket stream에 쓰임
         # _hv_zone_tensor = frame.get_hv_radius_result()  # detection log socket stream에 쓰임
