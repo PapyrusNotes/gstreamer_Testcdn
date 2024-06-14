@@ -7,6 +7,7 @@ from gi.repository import Gst, GstRtsp
 import sys
 
 from pipeline.callbacks.callbacks import on_emit_frame, on_start_feed, on_halt_feed
+from pipeline.callbacks.callbacks import on_draw
 
 
 class HLSConstructor:
@@ -159,6 +160,8 @@ class InferHLSConstructor:
 
         convert = Gst.ElementFactory.make("videoconvert", "convert")
         overlay = Gst.ElementFactory.make("cairooverlay", "overlay")
+        overlay.connect('draw', on_draw, self.index)
+
         convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
         x264enc = Gst.ElementFactory.make("x264enc", "x264enc")
         x264enc.set_property("tune", "zerolatency")
