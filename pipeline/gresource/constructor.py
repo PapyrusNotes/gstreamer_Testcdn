@@ -163,6 +163,7 @@ class InferHLSConstructor:
         overlay.connect('draw', on_draw, self.index)
 
         convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
+        encode_queue = Gst.ElementFactory.make("queue", "decode_queue")
 
         x264enc = Gst.ElementFactory.make("x264enc", "x264enc")
         x264enc.set_property("tune", "zerolatency")
@@ -182,6 +183,7 @@ class InferHLSConstructor:
         Gst.Bin.add(new_bin, convert)
         Gst.Bin.add(new_bin, overlay)
         Gst.Bin.add(new_bin, convert2)
+        Gst.Bin.add(new_bin, encode_queue)
         Gst.Bin.add(new_bin, x264enc)
         Gst.Bin.add(new_bin, mpegtsmux)
         Gst.Bin.add(new_bin, hlssink)
@@ -198,9 +200,13 @@ class InferHLSConstructor:
         if ret:
             print("InferHLS Bin : overlay - convert2 connected")
 
-        ret = convert2.link(x264enc)
+        ret = convert2.link(encode_queue)
         if ret:
-            print("InferHLS Bin : convert2 - x264enc connected")
+            print("InferHLS Bin : convert2 - encode_queue connected")
+
+        ret = encode_queue.link(x264enc)
+        if ret:
+            print("InferHLS Bin : encode_queue - x264enc connected")
 
         ret = ret and x264enc.link(mpegtsmux)
         if ret:
