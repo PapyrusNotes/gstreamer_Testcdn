@@ -19,7 +19,7 @@ def draw_bbox(context, stream_code, timestamp):
         context.set_line_width(8)
         context.set_source_rgba(*CLASS_RGBA[int(obj_tensor_res[0][i][5])])
         context.stroke()
-        text = f'{CLASS[int(obj_tensor_res[0][i][5])]} | Conf[{round(float(obj_tensor_res[0][i][4]), 2)}] | {timestamp}'
+        text = f'{CLASS[int(obj_tensor_res[0][i][5])]} | Conf[{round(float(obj_tensor_res[0][i][4]), 2)}]'
         (x, y, w, h, dx, dy) = context.text_extents(text)
         context.rectangle(x1, y1 - 36, w, 36)
         context.set_line_width(8)
