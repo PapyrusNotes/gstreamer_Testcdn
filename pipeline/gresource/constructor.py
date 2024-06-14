@@ -165,6 +165,7 @@ class InferHLSConstructor:
         convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
 
         x264enc = Gst.ElementFactory.make("x264enc", "x264enc")
+        x264enc.set_property("tune", "zerolatency")
 
         mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
         hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
