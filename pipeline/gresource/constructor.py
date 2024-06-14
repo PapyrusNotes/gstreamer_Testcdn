@@ -137,7 +137,6 @@ class AppSinkConstructor:
         return new_bin
 
 
-
 class InferHLSConstructor:
     def __init__(self, index, pipeline):
         self.index = index
