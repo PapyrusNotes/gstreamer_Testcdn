@@ -7,7 +7,7 @@ from calculator.extractor import get_ndarray
 # from calculator.zone import hv_radius
 from app_worker.global_tensors import obj_tensor
 
-infer_queue = Queue(16)
+infer_queue = Queue(32)
 save_queues = [Queue(32) for _ in range(30)]
 infer_queues = [Queue(32) for _ in range(30)]
 frame_queue = mpQueue(100)
