@@ -169,7 +169,7 @@ class InferHLSConstructor:
         x264enc.set_property("bitrate", 1400)
         x264enc.set_property("speed-preset", 4)
         x264enc.set_property("pass", 5)
-        x264enc.set_property("string-option", f"fps=20")
+        x264enc.set_property("option-string", f"fps=20")
 
         mpegtsmux = Gst.ElementFactory.make("mpegtsmux", "mpegtsmux")
         hlssink = Gst.ElementFactory.make("hlssink", "hlssink")
