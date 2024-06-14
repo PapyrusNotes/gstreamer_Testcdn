@@ -21,7 +21,7 @@ def on_emit_frame(appsink, index):
         infer_queue.put(new_frame, timeout=0)
     except queue.Full:
         print("Appsink CALL BACK : infer_queue FULL")
-    return True
+        time.sleep(1)
 
 
 def on_start_feed(appsrc, length, save_queue_index):
@@ -30,11 +30,11 @@ def on_start_feed(appsrc, length, save_queue_index):
     save_queue = save_queues[save_queue_index]
     if save_queue is None:
         print(f"Appsrc CALL BACK : save_queue {save_queue_index} is None")
-        return False
+        time.sleep(1)
 
     if save_queue.qsize() < 1 or infer_queue.qsize() < 5:
         print("Appsrc CALL BACK : queue sparse reacehd")
-        time.sleep(2)
+        time.sleep(1)
         print("Appsrc CALL BACK : save_queue size : ", save_queue.qsize())
         print("Appsrc CALL BACK : infer_queue size : ", infer_queue.qsize())
         buffer_size = 1920 * 1080 * 3
@@ -50,7 +50,7 @@ def on_start_feed(appsrc, length, save_queue_index):
         gst_buffer = frame.get_buffer()
         appsrc.emit("push-buffer", gst_buffer)  # App pushes to data to gpipeline
     except queue.Empty:
-        return True
+        time.sleep(1)
 
 
 def on_halt_feed(appsrc, udata):

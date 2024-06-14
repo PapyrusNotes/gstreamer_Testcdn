@@ -39,4 +39,4 @@ class AppWorker:
 
             save_queues[save_queue_index].put(frame)
         except queue.Empty:
-            pass
+            time.sleep(1)
