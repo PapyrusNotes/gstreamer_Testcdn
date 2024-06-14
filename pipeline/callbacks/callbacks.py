@@ -21,7 +21,7 @@ def on_emit_frame(appsink, index):
         infer_queue.put(new_frame, timeout=0)
     except queue.Full:
         print("Appsink CALL BACK : infer_queue FULL")
-        time.sleep(1)
+    return True
 
 
 def on_start_feed(appsrc, length, save_queue_index):
@@ -50,7 +50,8 @@ def on_start_feed(appsrc, length, save_queue_index):
         gst_buffer = frame.get_buffer()
         appsrc.emit("push-buffer", gst_buffer)  # App pushes to data to gpipeline
     except queue.Empty:
-        time.sleep(1)
+        print("Appsrc CALL BACK : on_start_feed, frame hit")
+    return True
 
 
 def on_halt_feed(appsrc, udata):

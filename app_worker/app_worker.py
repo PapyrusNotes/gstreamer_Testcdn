@@ -21,8 +21,6 @@ class AppWorker:
 
     def process_imaging(self):
         try:
-            if infer_queue.qsize() < 1:
-                time.sleep(0.5)
             print("Main App : infer_queue size : ", infer_queue.qsize())
             frame = infer_queue.get(timeout=0)
             sample = frame.get_sample()
@@ -39,4 +37,4 @@ class AppWorker:
 
             save_queues[save_queue_index].put(frame)
         except queue.Empty:
-            time.sleep(1)
+            print("Main App Infer_queue empty")
