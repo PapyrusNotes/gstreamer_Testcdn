@@ -176,6 +176,7 @@ class InferHLSConstructor:
         appsrc.connect("need-data", on_start_feed, self.index)
         appsrc.connect("enough-data", on_halt_feed, self.index)
         caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1280, height=(int)720")
+        caps2 = Gst.Caps.from_string(f"video/x-raw, width=(int)1280, height=(int)720")
         appsrc.set_property("caps", caps)
 
         convert = Gst.ElementFactory.make("videoconvert", "convert")
@@ -235,7 +236,7 @@ class InferHLSConstructor:
         if ret:
             print("InferHLS Bin : videoscale - videorate connected")
 
-        ret = ret and videorate.link_filtered(x264enc, caps)
+        ret = ret and videorate.link_filtered(x264enc, caps2)
         if ret:
             print("InferHLS Bin : videorate - x264enc connected")
 
