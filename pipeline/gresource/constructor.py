@@ -186,10 +186,12 @@ class InferHLSConstructor:
         convert2 = Gst.ElementFactory.make("videoconvert", "convert2")
         videoscale = Gst.ElementFactory.make("videoscale")
         videorate = Gst.ElementFactory.make("videorate")
+        videorate.set_property("drop-only", True)
+        videorate.set_property("max-rate", 20)
+        videorate.set_property("silent", True)
 
         x264enc = Gst.ElementFactory.make("x264enc", "x264enc")  # video/x-264
         x264enc.set_property("tune", "zerolatency")
-        x264enc.set_property("bitrate", 1200)
         x264enc.set_property("speed-preset", 4)
         x264enc.set_property("pass", 5)
 
