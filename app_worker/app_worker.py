@@ -22,7 +22,7 @@ class AppWorker:
     def process_imaging(self):
         try:
             print("Main App : infer_queue size : ", infer_queue.qsize())
-            frame = infer_queue.get(timeout=1)
+            frame = infer_queue.get(timeout=0.01)
             sample = frame.get_sample()
             stream_code = frame.stream_code
             save_queue_index = frame.save_queue_index
