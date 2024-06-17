@@ -192,7 +192,7 @@ class InferHLSConstructor:
 
         x264enc = Gst.ElementFactory.make("x264enc", "x264enc")  # video/x-264
         x264enc.set_property("tune", "zerolatency")
-        x264enc.set_property("speed-preset", 1)
+        x264enc.set_property("speed-preset", 4)
         x264enc.set_property("bitrate", 8000)
         x264enc.set_property("pass", 5)
         x264enc.set_property("b-pyramid", True)
