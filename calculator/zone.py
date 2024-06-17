@@ -14,7 +14,7 @@ from calculator.constants import Y_CENTER_DICT, DIST_DICT, ELLIPSE_DICT, OBJECT_
 
 def get_circle_coord(theta, x_center, y_center, radius, class_label):
     x = x_center + radius * math.cos(theta)
-    y = y_center + radius * math.sin(theta) * max(0.3, y_center / 1080) * ELLIPSE_DICT[class_label]
+    y = y_center + radius * math.sin(theta) * max(0.3, y_center / 720) * ELLIPSE_DICT[class_label]
     return [x, y]
 
 
@@ -69,7 +69,7 @@ def hv_radius(object_result):
         workers = workers[workers.confidence > 0.7]
 
         obj_zone = sv.PolygonZone(polygon=radius_zone['coords'][f'poly{i}'],
-                                  frame_resolution_wh=(1920, 1080))
+                                  frame_resolution_wh=(1280, 720))
         radius_zone['res'][f'poly{i}'] = sum(obj_zone.trigger(detections=workers))
 
     return radius_zone
