@@ -235,7 +235,7 @@ class InferHLSConstructor:
         if ret:
             print("InferHLS Bin : videoscale - videorate connected")
 
-        ret = ret and videorate.link_filtered(caps, x264enc)
+        ret = ret and videorate.link_filtered(x264enc, caps)
         if ret:
             print("InferHLS Bin : videorate - x264enc connected")
 
