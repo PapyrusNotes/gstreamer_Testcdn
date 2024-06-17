@@ -175,7 +175,7 @@ class InferHLSConstructor:
         appsrc.set_property("emit-signals", True)
         appsrc.connect("need-data", on_start_feed, self.index)
         appsrc.connect("enough-data", on_halt_feed, self.index)
-        caps = Gst.Caps.from_string(f"video/x-raw, format=RGB, width=1280, height=720")
+        caps = Gst.Caps.from_string(f"video/x-raw, format=(string)RGB, width=(int)1280, height=(int)720")
         appsrc.set_property("caps", caps)
 
         convert = Gst.ElementFactory.make("videoconvert", "convert")
